@@ -1,40 +1,7 @@
-lua 扩展for [太阳神三国杀](https://github.com/gaodayihao/QSanguosha)
-===========================
-
-战功包
---------
-*  OL的将近300个战功移植到太阳神三国杀, sqlite保存战功数据, hta/html查看战功
+*  新战功包(dev分支)下载： https://github.com/haveatry823/qsgsext/archive/dev.zip
 *  
-*  说明,安装以及发布贴:  http://tieba.baidu.com/p/1922424820
+*  下载后必须按照win7的安装方式安装，安装方法见此贴:   http://tieba.baidu.com/p/1929665238
 *  
-*  XP安装包:   https://github.com/haveatry823/qsgsext/zipball/master
+*  运行的时候要先将原来的战功lua暂时先删除，将【 你的游戏目录/extensions/zhangong.hta 】 这文件先移动到其他目录去
 *  
-*  win7安装包: https://github.com/haveatry823/qsgsext/zipball/win7
-
-
-无尽模式包
-----------
-
-*  1v1 普通2人局的无尽模式, 玩家3条命 VS 电脑 99条命， 提供存盘及读取进度等功能
-*  
-*  说明,安装以及发布贴:   http://tieba.baidu.com/p/1929665238
-*  
-*  下载: https://github.com/haveatry823/qsgsext/zipball/endless
-*  
-*  分支: https://github.com/haveatry823/qsgsext/tree/endless
-    
-
-战功包截图
-------
-1. 战功成就系统
-   * ![战功1](https://qsgsext.googlecode.com/svn-history/r23/wiki/overview.jpg)
-   * 
-   * ![战功2](https://qsgsext.googlecode.com/svn-history/r23/wiki/zhonghe.jpg)
-   * 
-   * ![战功2](https://qsgsext.googlecode.com/svn-history/r23/wiki/qun.jpg)
-   * 
-   * ![战功2](https://qsgsext.googlecode.com/svn-history/r23/wiki/results.jpg)
-   * 
-    
-
-
+*  查看新战功的文件是 zhangong_dev.hta
