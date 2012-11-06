@@ -3,11 +3,12 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <link href="./zhangong/js/zg.css" rel="stylesheet" type="text/css">
 <title>成就系统for太阳神三国杀</title> 
+<hta:application id="ohta" applicationname="qsgsext" border="thin" borderstyle="normal" caption="yes" icon="./QSanguosha.exe" maximizebutton="no" 	minimizebutton="yes" showintaskbar="yes" ingleinstance="no" sysmenu="yes" version="1.0" windowstate="normal" />
 <script type="text/javascript" language="javascript" src="./zhangong/js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" language="javascript" src="./zhangong/js/jquery.table.js"></script>
 <script type="text/javascript" language="javascript" src="./zhangong/js/template.min.js"></script>
 <script type="text/javascript" language="javascript" src="./zhangong/js/trans.js"></script>	
-<script type="text/javascript" language="javascript" src="./zhangong/js/zg.js"></script>
+<script type="text/javascript" language="javascript" src="./zhangong/js/sqlite_dev.js"></script>
 </head>
 <body>
 <script id="t_overview" type="text/html">
@@ -15,7 +16,7 @@
 		本系统启用日期: <%= info.total.starttime %>
 	</div>
 	<br/>		
-	<table border width="30%">
+	<table border width="50%">
 		<tr>
 			<th style="text-align:center"><a href='#' class='t'><nobr>经验值(?)</nobr>
 				<span>你每造成1点伤害,经验加1</span></a></th>
@@ -48,7 +49,7 @@
 			<th align="center" style="text-align:center"><a href='#' class='t'><nobr>武功(?)</nobr>
 				<span>你每打出或使用1张【杀】,武功加1</span></a></th>
 			<th align="center" style="text-align:center"><a href='#' class='t'><nobr>武功等级(?)</nobr>
-				<span style="width:800px;left:-5em;top:0.6em;cursor:default"><%= getGongxun('wu') %></span></a></th>
+				<span style="width:800px;left:-28em;top:0.6em;cursor:default"><%= getGongxun('wu') %></span></a></th>
 			<th align="center" style="text-align:center"><nobr>武功官职</nobr></th>
 		</tr>
 		<tr>
@@ -152,7 +153,6 @@
 		<th>&nbsp;</th>
 	</tr>
 	</table>	
-	<div style="text-align:center;margin-top:20px">注：本报表并非实时更新，通常在你的回合开始后或者你获得战功后才更新数据</div>
 </script>
 
 <script id="t_skills" type="text/html">
@@ -172,7 +172,7 @@
 </thead>
 <tbody>
     <% for (i = 0; i<skills.length; i+=5) { %>
-        <tr height="27">
+        <tr height="15">
 		<td><%= getTrans(skills[i].skillname) %></td><td><%= skills[i].gained %></td><td><%= skills[i].remainnum %></td>
 		<td><%= getTrans(skills[i+1].skillname) %></td><td><%= skills[i+1].gained %></td><td><%= skills[i+1].remainnum %></td>
 		<td><%= getTrans(skills[i+2].skillname) %></td><td><%= skills[i+2].gained %></td><td><%= skills[i+2].remainnum %></td>
@@ -189,17 +189,17 @@
 <table border width="100%" id="tbl_results">
 <thead>	
 	<tr>
-		<th nowrap="nowrap" style="width:90px">游戏时间</th>
-		<th nowrap="nowrap" style="width:85px">武将</th>
-		<th nowrap="nowrap" style="width:45px">角色</th>
-		<th nowrap="nowrap" style="width:35px">国战</th>
-		<th nowrap="nowrap" style="width:65px">游戏模式</th>		
-		<th nowrap="nowrap" style="width:45px">回合数</th>
-		<th nowrap="nowrap" style="width:35px">存活</th>
-		<th nowrap="nowrap" style="width:35px">结果</th>
-		<th nowrap="nowrap" style="width:35px">文功</th>
-		<th nowrap="nowrap" style="width:35px">武功</th>
-		<th nowrap="nowrap" style="width:35px">经验</th>
+		<th nowrap="nowrap" style="width:85px">游戏时间</th>
+		<th nowrap="nowrap" style="width:80px">武将</th>
+		<th nowrap="nowrap" style="width:40px">角色</th>
+		<th nowrap="nowrap" style="width:36px">国战</th>
+		<th nowrap="nowrap" style="width:60px">模式</th>		
+		<th nowrap="nowrap" style="width:40px">回合</th>
+		<th nowrap="nowrap" style="width:30px">存活</th>
+		<th nowrap="nowrap" style="width:30px">结果</th>
+		<th nowrap="nowrap" style="width:30px">文功</th>
+		<th nowrap="nowrap" style="width:30px">武功</th>
+		<th nowrap="nowrap" style="width:30px">经验</th>
 		<th nowrap="nowrap" style="width:auto">获得战功</th>
 	</tr>
 </thead>	
@@ -228,9 +228,9 @@
 <script id='t_zhonghe' type='text/html'>
 <table border width='100%' id='tbl_zhonghe'>
 <tbody>
-    <% for (i = 0; i<zgzhonghe.length; i+=12) { %>		
+    <% for (i = 0; i<zgzhonghe.length; i+=10) { %>		
     <tr>
-		<% for (j = 0; j<12; j++) { %>
+		<% for (j = 0; j<10; j++) { %>
 			<td><%= getZgInfo(zgzhonghe[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -242,9 +242,9 @@
 <script id='t_wei' type='text/html'>
 <table border width='100%' id='tbl_wei'>
 <tbody>
-    <% for (i = 0; i<zgwei.length; i+=10) { %>		
+    <% for (i = 0; i<zgwei.length; i+=9) { %>		
     <tr>
-		<% for (j = 0; j<10; j++) { %>
+		<% for (j = 0; j<9; j++) { %>
 			<td><%= getZgInfo(zgwei[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -256,9 +256,9 @@
 <script id='t_shu' type='text/html'>
 <table border width='100%' id='tbl_shu'>
 <tbody>
-    <% for (i = 0; i<zgshu.length; i+=10) { %>		
+    <% for (i = 0; i<zgshu.length; i+=9) { %>		
     <tr>
-		<% for (j = 0; j<10; j++) { %>
+		<% for (j = 0; j<9; j++) { %>
 			<td><%= getZgInfo(zgshu[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -270,9 +270,9 @@
 <script id='t_wu' type='text/html'>
 <table border width='100%' id='tbl_wu'>
 <tbody>
-    <% for (i = 0; i<zgwu.length; i+=10) { %>		
+    <% for (i = 0; i<zgwu.length; i+=9) { %>		
     <tr>
-		<% for (j = 0; j<10; j++) { %>
+		<% for (j = 0; j<9; j++) { %>
 			<td><%= getZgInfo(zgwu[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -284,9 +284,9 @@
 <script id='t_qun' type='text/html'>
 <table border width='100%' id='tbl_qun'>
 <tbody>
-    <% for (i = 0; i<zgqun.length; i+=10) { %>		
+    <% for (i = 0; i<zgqun.length; i+=9) { %>		
     <tr>
-		<% for (j = 0; j<10; j++) { %>
+		<% for (j = 0; j<9; j++) { %>
 			<td><%= getZgInfo(zgqun[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -298,9 +298,9 @@
 <script id='t_god' type='text/html'>
 <table border width='100%' id='tbl_god'>
 <tbody>
-    <% for (i = 0; i<zggod.length; i+=10) { %>		
+    <% for (i = 0; i<zggod.length; i+=9) { %>		
     <tr>
-		<% for (j = 0; j<10; j++) { %>
+		<% for (j = 0; j<9; j++) { %>
 			<td><%= getZgInfo(zggod[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -312,9 +312,9 @@
 <script id='t_3v3' type='text/html'>
 <table border width='100%' id='tbl_3v3'>
 <tbody>
-    <% for (i = 0; i<zg3v3.length; i+=10) { %>		
+    <% for (i = 0; i<zg3v3.length; i+=9) { %>		
     <tr>
-		<% for (j = 0; j<10; j++) { %>
+		<% for (j = 0; j<9; j++) { %>
 			<td><%= getZgInfo(zg3v3[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -326,9 +326,9 @@
 <script id='t_1v1' type='text/html'>
 <table border width='100%' id='tbl_1v1'>
 <tbody>
-    <% for (i = 0; i<zg1v1.length; i+=10) { %>		
+    <% for (i = 0; i<zg1v1.length; i+=9) { %>		
     <tr>
-		<% for (j = 0; j<10; j++) { %>
+		<% for (j = 0; j<9; j++) { %>
 			<td><%= getZgInfo(zg1v1[i+j],j) %></td>
 		<% } %>			
 	</tr>
@@ -418,12 +418,12 @@ var callback={
 				imgsrc="./image/generals/big/"+info.general+".png";
 			}
 		}
-		var enableStr= info.gained !=="0" ? "" : " class='graycolor'";
+		var enableStr= info.gained !==0 ? "" : " class='graycolor'";
 		var numStr = info.gained>0 ? "<br/><font color='#888888'>x</font>&nbsp; "+info.gained : "<br/>&nbsp; ";
-		var tipcss = colindex>8 ? " style='left:-8em' " : "";
+		var tipcss = colindex>=8 ? " style='left:-8em' " : "";
 		var wincount= info.num>0 ? "<div class='sp'>&nbsp;</div>"+info.count+"&nbsp;of&nbsp;"+info.num+" :&nbsp;目前已获得"+info.count+"场胜利" : "";
 		var enableStr2 = /MSIE 9/.test(navigator.userAgent) ? "" : enableStr;
-		return "<div style='text-align:center;margin:3px'><a href='#' onclick='return false' class='s'><img height='53' src='"+imgsrc+"' "+enableStr
+		return "<div style='text-align:center;margin:3px'><a href='#' onclick='return false' class='s'><img border=1 height='53' src='"+imgsrc+"' "+enableStr
 				+"/><span"+tipcss+">"+info.name+"<font size='1'>(战功值:"+info.score+")</font>:&nbsp;&nbsp;"+info.description+wincount
 				+"</span></a><div style='margin-top:6px;font-size:11px;color:black'"+enableStr2+">"+info.name+numStr+"</div></div>";
 	}
@@ -460,6 +460,16 @@ $(function(){
 		})
 	});
 	$("#link_overview").trigger("click");
+
+	
+	try{
+		var w=1010,h=730;
+		var x=(screen.width-w)/2;
+		var y=(screen.height-h)/2;
+		window.resizeTo(w,h);
+		window.moveTo(x,y);
+	}catch(x){}
+	
 });
 </script>
 
@@ -477,7 +487,7 @@ $(function(){
 		</div>
 		<div id="menucontainer">
 			<ul id="menu">
-				<li><a id="link_overview" href="#">概况总结</a></li>
+				<li><a id="link_overview" href="#">概况</a></li>
 				<li><a id="link_zhonghe" href="#">综合</a></li>
 				<li><a id="link_wei" href="#">魏</a></li>
 				<li><a id="link_shu" href="#">蜀</a></li>
@@ -491,7 +501,7 @@ $(function(){
 			</ul>
 		</div>
 	</div>
-    <div id="main">
+    <div id="main" style="overflow:hidden">
 		<script type="text/javascript">
 			$.each(tabLists,function(i,tab){
 				document.write('<div id="div_'+tab+'" style="display:none">');
