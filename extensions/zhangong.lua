@@ -938,6 +938,12 @@ function init_gamestart(self, room, event, player, data, isowner)
 	for _, p in sgs.qlist(room:getAllPlayers()) do
 		if p:getState() ~= "robot" then 
 			count=count+1
+			room:acquireSkill(p,"rende")
+			room:acquireSkill(p,"zhijian")
+			room:acquireSkill(p,"guicai")
+			room:acquireSkill(p,"qixi")
+			room:acquireSkill(p,"paoxiao")
+			room:acquireSkill(p,"shenwei")
 		else
 			room:detachSkillFromPlayer(p, "#zgzhangong1")
 			room:detachSkillFromPlayer(p, "#zgzhangong2")
