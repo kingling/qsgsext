@@ -714,22 +714,68 @@ end
 
 -- dkzz :: 杜康之子 :: 使用曹植在一局游戏中发动酒诗后成功用杀造成伤害累计5次
 --
-zgfunc[sgs.Todo].dkzz=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].dkzz=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='caozhi' then return false end
+	if not isowner then return false end
+	if data:toCardUse().card:getSkillName()=="jiushi" and player:getPhase()==sgs.Player_Play then addTurnData(name,1) end
+	if data:toCardUse().card:isKindOf("Slash") and player:getPhase()==sgs.Player_Play and player:hasFlag("drank")
+		and getTurnData(name)==1 then
+		room->setCardFlag(data:toCardUse().card, "jiushi-slash")
+end
+
+
+-- dkzz :: 杜康之子 :: 使用曹植在一局游戏中发动酒诗后成功用杀造成伤害累计5次
+--
+zgfunc[sgs.Damage].dkzz=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~='caozhi' then return false end
+	if not isowner then return false end
+	if damage.card and damage.card:isKindOf("Slash") and damage.card:hasFlag("jiushi-slash") then
+		addGameData(name,1)
+		if getGameData(name)==5 then addZhanGong(room,name)
+	end
 end
 
 
 -- dqzw :: 大权在握 :: 使用钟会在一局游戏中有超过8张权
 --
-zgfunc[sgs.Todo].dqzw=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.DamageComplete].dqzw=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhonghui' then return false end
+	if not isowner then return false end
+	if player:getPile("power"):length()>=8 and getGameData(name)==0 then
+		addGameData(name,1)
+		addZhanGong(room,name)
+	end
 end
 
 
 -- dym :: 大姨妈 :: 使用甄姬连续5回合洛神的第一次结果都是红色，不包括改判
 --
-zgfunc[sgs.Todo].dym=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.EventPhaseEnd].dym=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhenji' then return false end
+	if not isowner then return false end
+	if player:getPhase()==sgs.Player_Start and getTurnData(name)==0 then setGameData(name, 0)
+end
+
+
+-- dym :: 大姨妈 :: 使用甄姬连续5回合洛神的第一次结果都是红色，不包括改判
+--
+zgfunc[sgs.FinishRetrial].dym=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~='zhenji' then return false end
+	if not isowner then return false end
+	local judge=data:toJudge()
+	if judge.reason=="luoshen" and judge.who:objectName()==room:getOwner():objectName() then
+		if judge:isGood() then 
+			setGameData(name,0)
+		else
+			if room:getTag("retrial"):toBool()==false then			
+				addTurnData(name,1)
+				addGameData(name,1)
+				if getGameData(name)==5 then 			 
+					addZhanGong(room,name)			
+				end
+			end
+		end
+	end
 end
 
 
@@ -742,8 +788,17 @@ end
 
 -- glnc :: 刚烈难存 :: 使用夏侯惇在一局游戏中连续4次刚烈判定均为红桃
 --
-zgfunc[sgs.Todo].glnc=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.FinishRetrial].glnc=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='xiahoudun' then return false end
+	if not isowner then return false end
+	if judge.reason=="ganglie" and judge.who:objectName()==room:getOwner():objectName() then
+		if judge:isGood() then
+			setGameData(name,0)
+		else
+			addGameData(name,1)
+			if getGameData(name)==4 then addZhanGong(room,name) end
+		end
+	end
 end
 
 
@@ -784,8 +839,12 @@ end
 
 -- qbcs :: 七步成诗 :: 使用曹植在一局游戏中发动酒诗7次
 --
-zgfunc[sgs.Todo].qbcs=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].qbcs=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='caozhi' then return false end
+	if data:toCardUse().card:getSkillName()=="jiushi" then
+		addGameData(name,1)
+		if getGameData(name)==7 then addZhanGong(room,name) end
+	end
 end
 
 
