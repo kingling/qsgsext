@@ -252,7 +252,7 @@ zgfunc[sgs.GameOverJudge].callback.dxgl=function(room,player,data,name,result)
 			female_loyalist = female_loyalist+1
 		end
 	end
-	if result =='win' and room:getOwner():isLord() and female_loyalist>=2 then addZhanGong(room,name) end
+	if result =='win' and room:getOwner():isLord() and room:getOwner():isMale() and female_loyalist>=2 then addZhanGong(room,name) end
 end
 
 
@@ -296,8 +296,12 @@ end
 
 -- jdfy :: 绝对防御 :: 在一局游戏中，使用八挂累计出闪20次
 --
-zgfunc[sgs.Todo].jdfy=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardResponsed].jdfy=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if data:toResponsed().m_card:isKindOf("Jink") and data:toResponsed().m_card:getSkillName()=="EightDiagram" then
+		addGameData(name,1)
+		if getGameData(name)==20 then addZhanGong(room,name) end
+	end
 end
 
 
