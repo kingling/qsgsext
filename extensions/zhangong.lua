@@ -101,7 +101,7 @@ zgfunc[sgs.GameOverJudge].tongji=function(self, room, event, player, data,isowne
 			if damage.card:isKindOf("TrickCard") then addTurnData("wen",1) end
 			if damage.card:isKindOf("Slash")	 then addTurnData("wu",1) end
 		end	
-		gainSkill(room)
+		--gainSkill(room)
 	end
 	
 	local kingdom=room:getOwner():getKingdom()
