@@ -235,7 +235,7 @@ end
 zgfunc[sgs.CardFinished].cqdd=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
 	local use = data:toCardUse()
-	if use.card:isKindOf("Dismantlement") or use.card:isKindOf("Snatch") then
+	if use.card:isKindOf("Dismantlement") then
 		addGameData(name,1)
 		if getGameData(name)==10 then addZhanGong(room,name) end
 	end
@@ -274,7 +274,7 @@ end
 zgfunc[sgs.GameStart].gn=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
 	local peach_num=0
-	for _,cd in sgs.qlist(player:getHandcards():length()) do
+	for _,cd in sgs.qlist(player:getHandcards()) do
 		if cd:isKindOf("Peach") then peach_num=peach_num+1 end
 	end
 	if peach_num == 4 then addZhanGong(room,name) end
@@ -307,15 +307,32 @@ end
 
 -- jg :: 酒鬼 :: 出牌阶段开始时，手牌中至少有3张“酒”
 --
-zgfunc[sgs.Todo].jg=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.EventPhaseStart].jg=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getPhase()==sgs.Player_Play and player:getHandcardNum()>2 then
+		local analeptic_num=0
+		for _,cd in sgs.qlist(player:getHandcard()) do
+			if cd:isKindOf("Analeptic") then
+				analeptic_num=analeptic_num+1
+			end
+		end
+		if analeptic_num>=3 then addZhanGong(room,name) end
+	end
 end
 
 
 -- jhlt :: 举火燎天 :: 在一局游戏中，造成火焰伤害累计10点以上，不含武将技能
 --
-zgfunc[sgs.Todo].jhlt=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.Damage].jhlt=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local damage=data:toDamage()
+	if damage.card~=nil and damage.nature==sgs.DamageStruct_Fire then
+		addGameData(name,damage.damage)
+		if getGameData(name)>=10 then 
+			addZhanGong(room,name) 
+			setGameData(name, -100)
+		end
+	end
 end
 
 
@@ -328,22 +345,44 @@ end
 
 -- qshs :: 起死回生 :: 在一局游戏中，累计受过至少20点伤害且最后存活获胜
 --
-zgfunc[sgs.Todo].qshs=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.Damaged].qshs=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	addGameData(name, damage.damage)
+end
+
+
+-- qshs :: 起死回生 :: 在一局游戏中，累计受过至少20点伤害且最后存活获胜
+--
+zgfunc[sgs.GameOverJudge].callback.qshs=function(room,player,data,name,result)
+	if getGameData(name)>=20 and result=='win' and room:getOwner():isAlive() then addZhanGong(room,name) end
 end
 
 
 -- stzs :: 神偷再世 :: 在一局游戏中，累计使用卡牌顺手牵羊10次以上
 --
-zgfunc[sgs.Todo].stzs=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardFinished].stzs=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local use = data:toCardUse()
+	if use.card:isKindOf("Snatch") then
+		addGameData(name,1)
+		if getGameData(name)==10 then addZhanGong(room,name) end
+	end
 end
 
 
 -- thy :: 桃花运 :: 当你的开局4牌全部为红桃时，体力上限加1
 --
-zgfunc[sgs.Todo].thy=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.GameStart].thy=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local heart_num=0
+	if player:getHandcardNum()~=4 then return false end
+	for _,cd in sgs.qlist(player:getHandcards()) do
+		if cd:getSuit()==sgs.Card_Heart then heart_num=heart_num+1 end
+	end
+	if heart_num == 4 then 
+		addZhanGong(room,name) 
+		room:setPlayerProperty(player, "maxhp", sgs.QVariant(player:getMaxHp()+1))
+	end
 end
 
 
