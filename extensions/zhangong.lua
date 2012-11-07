@@ -220,43 +220,77 @@ end
 
 -- cqb :: 拆迁办 :: 在一个回合内使用卡牌过河拆桥/顺手牵羊累计4次
 --
-zgfunc[sgs.Todo].cqb=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardFinished].cqb=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local use = data:toCardUse()
+	if use.card:isKindOf("Dismantlement") or use.card:isKindOf("Snatch") then
+		addTurnData(name,1)
+		if getTurnData(name)==10 then addZhanGong(room,name) end
+	end
 end
 
 
 -- cqdd :: 拆迁大队 :: 在一局游戏中，累计使用卡牌过河拆桥10次以上
 --
-zgfunc[sgs.Todo].cqdd=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardFinished].cqdd=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local use = data:toCardUse()
+	if use.card:isKindOf("Dismantlement") or use.card:isKindOf("Snatch") then
+		addGameData(name,1)
+		if getGameData(name)==10 then addZhanGong(room,name) end
+	end
 end
 
 
 -- dxgl :: 东西宫略 :: 在一局游戏中，身份为男性主公，而忠臣为两名女性武将并获胜
 --
-zgfunc[sgs.Todo].dxgl=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.GameOverJudge].callback.dxgl=function(room,player,data,name,result)
+	if getGameData("hegemony")==1 then return false end
+	local female_loyalist = 0
+	for _,op in sgs.qlist(room:getPlayers()) do
+		if op:getRole()=="loyalist" and op:isFemale() then
+			female_loyalist = female_loyalist+1
+		end
+	end
+	if result =='win' and room:getOwner():isLord() and female_loyalist>=2 then addZhanGong(room,name) end
 end
 
 
 -- gjcc :: 诡计重重 :: 在一局游戏中，累计使用锦囊牌至少20次
 --
-zgfunc[sgs.Todo].gjcc=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].gjcc=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local use = data:toCardUse()
+	if use.card:isKindOf("TrickCard") then 
+		addGameData(name,1)
+		if getGameData(name)==20 then addZhanGong(room,name) end
+	end
 	
 end
 
 
 -- gn :: 果农 :: 游戏开始时，起手4张“桃”
 --
-zgfunc[sgs.Todo].gn=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.GameStart].gn=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local peach_num=0
+	for _,cd in sgs.qlist(player:getHandcards():length()) do
+		if cd:isKindOf("Peach") then peach_num=peach_num+1 end
+	end
+	if peach_num == 4 then addZhanGong(room,name) end
 end
 
 
 -- htdl :: 黄天当立 :: 使用张角在一局游戏中通过黄天得到的闪不少于8张
 --
-zgfunc[sgs.Todo].htdl=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardEffected].htdl=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getGeneralName()~="zhangjiao" then return false end
+	local effect=data:toCardEffect()
+	if effect.card:isKindOf("HuangtianCard") and effect.card:getSubcards():first():isKindOf("Jink") then
+		addGameData(name,1)
+		if getGameData(name)==8 then addZhanGong(room,name)
+	end
 end
 
 
