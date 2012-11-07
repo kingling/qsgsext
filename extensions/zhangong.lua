@@ -18,6 +18,8 @@ zgfunc[sgs.CardEffect]={}
 zgfunc[sgs.CardEffected]={}
 zgfunc[sgs.CardFinished]={}
 zgfunc[sgs.CardsMoveOneTime]={}
+zgfunc[sgs.CardDiscarded]={}
+zgfunc[sgs.CardResponsed]={}
 zgfunc[sgs.ChoiceMade]={}
 
 
@@ -101,7 +103,7 @@ zgfunc[sgs.GameOverJudge].tongji=function(self, room, event, player, data,isowne
 			if damage.card:isKindOf("TrickCard") then addTurnData("wen",1) end
 			if damage.card:isKindOf("Slash")	 then addTurnData("wu",1) end
 		end	
-		gainSkill(room)
+		--gainSkill(room)
 	end
 	
 	local kingdom=room:getOwner():getKingdom()
@@ -178,15 +180,27 @@ end
 
 -- bjz :: 败家子 :: 在一局游戏中，弃牌阶段累计弃掉至少10张桃
 --
-zgfunc[sgs.Todo].bjz=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardDiscarded].bjz=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getPhase()~=sgs.Player_Discard then return false end
+	local card = data:toCard()
+	for _,cdid in sgs.qlist(card:getSubcards()) do
+		if sgs.Sanguosha:getCard(cdid):isKindOf("Peach") then
+			addGameData(name,1)
+		end
+	end
+	if getGameData(name)==10 then addZhanGong(room,name) end
 end
 
 
 -- bqbr :: 不屈不饶 :: 一格体力情况下，累积出闪100次
 --
-zgfunc[sgs.Todo].bqbr=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardResponsed].bqbr=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getHp() == 1 and data:toResponsed().m_card:isKindOf("Jink") then
+		addGlobalData(name,1)
+		if getGlobalData(name)==100 then addZhanGong(room,name) end
+	end
 end
 
 
@@ -1038,7 +1052,8 @@ zgzhangong1 = sgs.CreateTriggerSkill{
 zgzhangong2 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong2",
 	events = {sgs.CardFinished,sgs.ChoiceMade,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,
-		sgs.CardEffected,sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.FinishRetrial},
+		sgs.CardEffected,sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.FinishRetrial,
+		sgs.CardDiscarded,sgs.CardResponsed},
 	priority = 6,
 	on_trigger = function(self, event, player, data)
 		local room = player:getRoom()
