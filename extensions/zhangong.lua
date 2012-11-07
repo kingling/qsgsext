@@ -148,8 +148,31 @@ end
 
 -- bj :: 暴君 :: 身为主公在1局游戏中，在反贼和内奸全部存活的情况下杀死全部忠臣，并最后胜利
 --
-zgfunc[sgs.Todo].bj=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.Death].bj=function(self, room, event, player, data,isowner,name)
+	local damage = data:toDamageStar()
+	if not damage then return false end
+	if getGameData("hegemony")==1 then return false end
+	if room:getOwner():isLord() and damage.from and damage.from:objectName()==room:getOwner():objectName() 
+		and damage.to:getRole()=="loyalist" then
+		local players = room:getPlayers()
+		local loyalist_alive,enemy_dead=0,0
+		for _, p in sgs.qlist(players) do
+			if p:getRole()=="rebel" or p:getRole()=="renegade" then
+				if p:isDead() then enemy_dead=enemy_dead+1 end
+			elseif p:getRole()=="loyalist" then
+				if p:isAlive() then loyalist_alive=loyalist_alive+1
+			end
+		end
+		if enemy_dead==0 and loyalist_alive==0 then addGameData(name,1) end
+	end		
+end
+
+
+-- bj :: 暴君 :: 身为主公在1局游戏中，在反贼和内奸全部存活的情况下杀死全部忠臣，并最后胜利
+-- 
+zgfunc[sgs.GameOverJudge].callback.bj=function(room,player,data,name,result)
+	if getGameData("hegemony")==1 then return false end
+	if result =='win' and getGameData(name)==1 then addZhanGong(room,name) end
 end
 
 
