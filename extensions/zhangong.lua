@@ -44,6 +44,7 @@ zgfunc[sgs.HpRecover]={}
 
 zgfunc[sgs.SlashEffect]={}
 zgfunc[sgs.SlashEffected]={}
+zgfunc[sgs.SlashMissed]={}
 
 zgfunc[sgs.TurnStart]={}
 zgfunc[sgs.Pindian]={}
@@ -630,8 +631,14 @@ end
 
 -- jjnh :: 禁军难护 :: 使用韩当在一局游戏中有角色濒死时发动“解烦”并出杀后均被闪避至少5次
 --
-zgfunc[sgs.Todo].jjnh=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.SlashMissed].jjnh=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='handang' then return false end
+	if not isowner then return false end
+	local effect=data:toSlashEffect()
+	if effect.slash:hasFlag("jiefan-slash") then
+		addGameData(name,1)
+		if getGameData(name)==5 then addZhanGong(room,name) end
+	end
 end
 
 
@@ -658,15 +665,29 @@ end
 
 -- ssex :: 三思而行 :: 使用孙权在一局游戏中利用制衡获得至少4张无中生有以及4张桃
 --
-zgfunc[sgs.Todo].ssex=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].ssex=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='sunquan' then return false end
+	if not isowner then return false end
+	local x=player:getHandcardNum()
+	local y=data:toCardUse().card:getSubcards():length()
+	for i=1, y, 1 do
+		if player:getHandcards()[x-y+i]):isKindOf("Peach") then
+			addGameData(name.."_peach",1)
+			if getGameData(name.."_peach)==4 and getGameData(name.."_exnihilo")==4 then addZhanGong(room,name) end
+		elseif player:getHandcards()[x-y+i]):isKindOf("ExNihilo") then
+			addGameData(name.."_exnihilo",1)
+			if getGameData(name.."_peach)==4 and getGameData(name.."_exnihilo")==4 then addZhanGong(room,name) end
+		end
+	end
 end
 
 
 -- sssl :: 深思熟虑 :: 使用孙权在一个回合内发动制衡的牌不少于10张
 --
-zgfunc[sgs.Todo].sssl=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished.sssl=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='sunquan' then return false end
+	if not isowner then return false end
+	if data:toCardUse().card:getSubcards():length()>=10 then addZhanGong(room,name)
 end
 
 
@@ -1274,7 +1295,7 @@ zgzhangong2 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong2",
 	events = {sgs.CardFinished,sgs.ChoiceMade,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,
 		sgs.CardEffected,sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.FinishRetrial,
-		sgs.CardDiscarded,sgs.CardResponsed},
+		sgs.CardDiscarded,sgs.CardResponsed,sgs.SlashMissed},
 	priority = 6,
 	on_trigger = function(self, event, player, data)
 		local room = player:getRoom()
