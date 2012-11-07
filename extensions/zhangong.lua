@@ -157,15 +157,13 @@ zgfunc[sgs.Death].bj=function(self, room, event, player, data,isowner,name)
 	if room:getOwner():isLord() and damage.from and damage.from:objectName()==room:getOwner():objectName() 
 		and damage.to:getRole()=="loyalist" then
 		local players = room:getPlayers()
-		local loyalist_alive,enemy_dead=0,0
+		local enemy_dead=0,0
 		for _, p in sgs.qlist(players) do
 			if p:getRole()=="rebel" or p:getRole()=="renegade" then
 				if p:isDead() then enemy_dead=enemy_dead+1 end
-			elseif p:getRole()=="loyalist" then
-				if p:isAlive() then loyalist_alive=loyalist_alive+1
 			end
 		end
-		if enemy_dead==0 and loyalist_alive==0 then addGameData(name,1) end
+		if enemy_dead==0 then addGameData(name,1) end
 	end		
 end
 
@@ -173,8 +171,18 @@ end
 -- bj :: 暴君 :: 身为主公在1局游戏中，在反贼和内奸全部存活的情况下杀死全部忠臣，并最后胜利
 -- 
 zgfunc[sgs.GameOverJudge].callback.bj=function(room,player,data,name,result)
+	if result~='win' then return false end
 	if getGameData("hegemony")==1 then return false end
-	if result =='win' and getGameData(name)==1 then addZhanGong(room,name) end
+	local loyalistnum=0
+	for _,ap in sgs.qlist(room:getPlayers()) do
+		if ap:getRole()=="loyalist" then
+			if ap:isAlive() then return false
+			else
+				loyalist_num=loylist_num+1
+			end
+		end
+	end
+	if getGameData(name)==loyalist_num then addZhanGong(room,name) end
 end
 
 
@@ -206,8 +214,16 @@ end
 
 -- bqk :: 兵器库 :: 在一局游戏中，累计装备过至少10次武器以及10次防具
 --
-zgfunc[sgs.Todo].bqk=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.CardFinished].bqk=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local use=data:toCardUse()
+	if use.card:isKindOf("Weapon") then
+		addGameData(name.."_weapon", 1)
+		if getGameData(name.."_weapon")==10 and getGameData(name.."_armor")==10 then addZhanGong(room,name)
+	elseif use.card:isKindOf("Armor") then
+		addGameData(name.."_armor", 1)
+		if getGameData(name.."_weapon")==10 and getGameData(name.."_armor")==10 then addZhanGong(room,name)
+	end
 end
 
 
@@ -388,8 +404,43 @@ end
 
 -- tyzy :: 桃园之义 :: 在一局游戏中，场上同时存在刘备、关羽、张飞三人且为队友，而你是其中一个并最后获胜
 --
-zgfunc[sgs.Todo].tyzy=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.GameOverJudge].callback.tyzy=function(room,player,data,name,result)
+	if result~='win' then return false end
+	local has_liubei,has_guanyu,has_zhangfei,issjy=false,false,false,false
+	function isTeammate(room,a,b)
+		if getGameData("hegemony")==1 then
+			return a:getKingdom()==b:getKingdom()
+		else
+			local ar=a:getRole()
+			local br=b:getRole()
+			if ar=="lord" or ar=="loyalist" then ar=="lord+loyalist" end
+			if br=="lord" or ar=="loyalist" then br=="lord+loyalist" end
+			if room:getMode()=='06_3v3' then				
+				if ar=="rebel" or ar=="renegade" then ar=="rebel+renegade" end
+				if br=="rebel" or br=="renegade" then br=="rebel+renegade" end
+			end
+			return ar==br
+		end
+	end
+	local owner = room:getOwner()
+	for _,ap in sgs.qlist(room:getPlayers()) do
+		if isTeammate(room,owner,ap) then
+			local gname = ap:getGeneralName()
+			if gname=="liubei" or gname=="bgm_liubei" then
+				has_liubei=true
+				if owner:objectName()==ap:objectName() then issjy==true
+			elseif gname=="guanyu" or gname=="shenguanyu" or gname=="sp_guanyu" or gname=="neo_guanyu" then
+				has_guanyu=true
+				if owner:objectName()==ap:objectName() then issjy==true
+			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname=="bgm_zhangfei" then
+				has_zhangfei=true
+				if owner:objectName()==ap:objectName() then issjy==true
+			end
+		end
+	end
+	if has_liubei and has_zhangfei and has_zhangfei and issjy then
+		addZhanGong(room, name)
+	end
 end
 
 
@@ -402,22 +453,52 @@ end
 
 -- wsww :: 为时未晚 :: 身为反贼，在一局游戏中杀死了除自己以外所有反贼并获得游戏的胜利
 --
-zgfunc[sgs.Todo].wsww=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.Death].wsww=function(self, room, event, player, data,isowner,name)
+	local damage = data:toDamageStar()
+	if not damage then return false end
+	if getGameData("hegemony")==1 then return false end
+	if room:getOwner():getRole=="rebel" and damage.from and damage.from:objectName()==room:getOwner():objectName() 
+		and damage.to:getRole()=="rebel" then
+		addGameData(name,1)
+	end	
+end
+
+
+-- wsww :: 为时未晚 :: 身为反贼，在一局游戏中杀死了除自己以外所有反贼并获得游戏的胜利
+--
+zgfunc[sgs.GameOverJudge].callback.wsww=functionfunction(room,player,data,name,result)
+	if result~='win' then return false end
+	if getGameData("hegemony")==1 then return false end
+	local rebel_num=0
+	for _,ap in sgs.qlist(room:getPlayers()) do
+		if ap:getRole()=="rebel" then
+			if ap:isAlive() then return false
+			else
+				rebel_num=rebel_num+1
+			end
+		end
+	end
+	if getGameData(name)==rebel_num then addZhanGong(room,name) end
 end
 
 
 -- xcdz :: 星驰电走 :: 在一局游戏中，累计出闪20次
 --
 zgfunc[sgs.Todo].xcdz=function(self, room, event, player, data,isowner,name)
-	
+	if data:toResponsed().m_card:isKindOf("Jink") then
+		addGameData(name,1)
+		if getGameData(name)==20 then addZhanGong(room,name) end
+	end
 end
 
 
 -- xhjs :: 悬壶济世 :: 在一局游戏中，使用桃或技能累计将我方队友脱离濒死状态4次以上
 --
-zgfunc[sgs.Todo].xhjs=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.HpRecover].xhjs=function(self, room, event, player, data,isowner,name)
+	local recover = data:toRecover()
+	if recover.recover>=player:getHp() and recover.who:objectName()==room:getOwner():objectName() then
+		addGameData(name,1)
+		if getGameData(name)==4 then addZhanGong(room,name)
 end
 
 
