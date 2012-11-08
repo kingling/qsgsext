@@ -369,6 +369,7 @@ end
 --
 zgfunc[sgs.Damaged].qshs=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
+	local damage=data:toDamage()
 	addGameData(name, damage.damage)
 end
 
