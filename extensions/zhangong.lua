@@ -855,22 +855,43 @@ end
 
 -- qjbc :: 奇计百出 :: 使用荀攸在一局游戏中，发动“奇策”使用至少六种锦囊
 --
-zgfunc[sgs.Todo].qjbc=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].qjbc=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='xunyou' then return false end
+	if not isowner then return false end
+	local use=data:toCardUse()
+	if use.card:getSkillName()=="qice" and getGameData(name..use.card:objectName())==0 then
+		addGameData(name,1)
+		addGameData(name..use.card:objectName(),1)
+		if getGameData(name)==6 then addZhanGong(room,name) end
+	end
 end
 
 
 -- qmjj :: 奇谋九计 :: 使用王异在一局游戏中至少成功发动九次秘计并获胜。
 --
-zgfunc[sgs.Todo].qmjj=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.FinishRetrial].qmjj=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='wangyi' then return false end
+	if not isowner then return false end
+	local judge=data:toJudge()
+	if judge.reason=="miji" and judge:isGood() and judge.who:objectName()==room:getOwner():objectName() then
+		addGameData(name,1)
+		if getGameData(name)==9 then addZhanGong(room,name) end
+	end
 end
 
 
 -- qqtx :: 权倾天下 :: 使用钟会在一局游戏中发动“排异”累计摸牌至少10张
 --
-zgfunc[sgs.Todo].qqtx=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].qqtx=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhonghui' then return false end
+	if not isowner then return false end
+	if data:toCardUse().card:isKindOf("PaiyiCard") and use.to:objectName()==player:objectName() then
+		addGameData(name,3)
+		if getGameData(name)>=10 then
+			addZhanGong(room,name)
+			setGameData(name,-100)
+		end
+	end
 end
 
 
@@ -890,15 +911,37 @@ end
 
 -- wzxj :: 稳重行军 :: 使用于禁在一局游戏中发动“毅重”抵御至少4次黑色杀
 --
-zgfunc[sgs.Todo].wzxj=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.SlashEffected].wzxj=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='yujin' then return false end
+	local effect= data:toSlashEffect()
+	if effect.to:hasSkill("yizhong") and effect.to:objectName()==room:getOwner():objectName() and effect.slash:isBlack() then
+		addGameData(name,1)
+		if getGameData(name)==3 then 			 
+			addZhanGong(room,name)
+		end
+	end
 end
 
 
 -- xhdc :: 雪痕敌耻 :: 使用☆SP夏侯惇在一局游戏中，发动雪痕杀死一名角色
 --
-zgfunc[sgs.Todo].xhdc=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].xhdc=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='bgm_xiahoudun' then return false end
+	local damage=data:toDamageStar()
+	if damage.card and damage.card:getSkillName()=="xuehan" and damage.from:objectName()==room:getOwner():objectName() then
+		addZhanGong(room,name)
+	end
+end
+
+
+-- xhdc :: 雪痕敌耻 :: 使用☆SP夏侯惇在一局游戏中，发动雪痕杀死一名角色
+--
+zgfunc[sgs.GameOverJudge].callback.xhdc=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='bgm_xiahoudun' then return false end
+	local damage=data:toDamageStar()
+	if damage.card and damage.card:getSkillName()=="xuehan" and damage.from:objectName()==room:getOwner():objectName() then
+		addZhanGong(room,name)
+	end
 end
 
 
@@ -911,22 +954,53 @@ end
 
 -- ybyt :: 义薄云天 :: 使用SP关羽在觉醒后杀死两个反贼并最后获胜
 --
-zgfunc[sgs.Todo].ybyt=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].ybyt=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='sp_guanyu' then return false end
+	local damage=data:toDamage()
+	if damage.from:objectName()==room:getOwner():objectName() and damage.from:getMark("danji")>0 and damage.to:getRole()=="rebel" then
+		addGameData(name,1)
+	end		
+end
+
+
+-- ybyt :: 义薄云天 :: 使用SP关羽在觉醒后杀死两个反贼并最后获胜
+--
+zgfunc[sgs.GameOverJudge].callback.ybyt=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='sp_guanyu' then return false end
+	if result~='win' then return false end
+	local damage=data:toDamage()
+	if damage.from:objectName()==room:getOwner():objectName() and damage.from:getMark("danji")>0 and damage.to:getRole()=="rebel" then
+		addGameData(name,1)
+	end	
+	if getGameData(name)==2 then addZhanGong(room,name) end
 end
 
 
 -- ajnf :: 暗箭难防 :: 使用马岱在一局游戏中发动“潜袭”成功至少6次
 --
-zgfunc[sgs.Todo].ajnf=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.FinishRetrial].ajnf=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='madai' then return false end
+	local judge=data:toJudge()
+	if judge.who:objectName()==room:getOwner():objectName() and judge.reason=="qianxi" and judge:isGood() then
+		addGameData(name,1)
+		if getGameData(name)==6 then addZhanGong(room,name) end
+	end
 end
 
 
 -- cbhw :: 长坂虎威 :: 使用张飞在一回合内使用8张杀
 --
-zgfunc[sgs.Todo].cbhw=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].cbhw=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhangfei' then return false end
+	if player:objectName()~=room:getCurrent():objectName() then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isKindOf("Slash") then 
+		addTurnData(name,1) 
+		if getTurnData(name)==8 then
+			addZhanGong(room,name)
+		end
+	end	
 end
 
 
@@ -939,8 +1013,13 @@ end
 
 -- dcxj :: 雕虫小技 :: 使用卧龙在一局游戏中发动“看破”至少15次
 --
-zgfunc[sgs.Todo].dcxj=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].dcxj=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='wolong' then return false end
+	local use=data:toCardUse()
+	if use.card:isKindOf("Nullification") and use.card:getSkillName()=="kanpo" then
+		addGameData(name,1)
+		if getGameData(name)==15 then addZhanGong(room,name)
+	end
 end
 
 
