@@ -230,8 +230,21 @@ end
 
 -- brz :: 百人斩 :: 累积杀死100人
 --
-zgfunc[sgs.Todo].brz=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.Death].brz=function(self, room, event, player, data,isowner,name)
+	local damage=data:toDamageStar()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
+		addGlobalData(name,1)
+		if getGlobalData(name)==100 then addZhanGong(room,name) end
+	end
+end
+
+
+zgfunc[sgs.GameOverJudge].callback.brz=function(room,player,data,name,result)
+	local damage=data:toDamageStar()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
+		addGlobalData(name,1)
+		if getGlobalData(name)==100 then addZhanGong(room,name) end
+	end
 end
 
 
@@ -360,8 +373,21 @@ end
 
 -- qrz :: 千人斩 :: 累积杀1000人
 --
-zgfunc[sgs.Todo].qrz=function(self, room, event, player, data,isowner,name)
-	
+zgfunc[sgs.Death].qrz=function(self, room, event, player, data,isowner,name)
+	local damage=data:toDamageStar()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
+		addGlobalData(name,1)
+		if getGlobalData(name)==1000 then addZhanGong(room,name) end
+	end
+end
+
+
+zgfunc[sgs.GameOverJudge].callback.qrz=function(room,player,data,name,result)
+	local damage=data:toDamageStar()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
+		addGlobalData(name,1)
+		if getGlobalData(name)==1000 then addZhanGong(room,name) end
+	end
 end
 
 
@@ -512,7 +538,7 @@ zgfunc[sgs.GameOverJudge].callback.xnhx=function(room,player,data,name,result)
 	local damage = data:toDamageStar()
 	if not damage then return false end
 	if getGameData("hegemony")==1 then return false end
-	for _ap in sgs.qlist(room:getAlivePlayers()) do
+	for _,ap in sgs.qlist(room:getAlivePlayers()) do
 		if ap:getRole()=="rebel" then return false end
 	end
 	if damage.from and damage.from:objectName()==room:getOwner():objectName() and damage.from:getRole()=="loyalist"
@@ -524,8 +550,17 @@ end
 
 -- ymds :: 驭马大师 :: 在一局游戏中，至少更换过8匹马
 --
-zgfunc[sgs.Todo].ymds=function(self, room, event, player, data,isowner,name)
-
+zgfunc[sgs.CardsMoveOneTime].ymds=function(self, room, event, player, data,isowner,name)
+	local move=data:toMoveOneTime()
+	if move.from_places:contains(sgs.Player_Equip) and move.from:objectName()==room:getOwner:objectName()
+		and move.reason==sgs.CardMoveReason_S_REASON_CHANGE_EQUIP then
+		for _,cdid in sgs.qlist(move.card_ids) do
+			if cdid:isKindOf("Horse") then
+				addGameData(name,1)
+				if getGameData(name)==8 then addZhanGong(room,name) end
+			end
+		end
+	end
 end
 
 
