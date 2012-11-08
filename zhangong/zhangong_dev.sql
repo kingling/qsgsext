@@ -252,8 +252,8 @@ INSERT INTO zhangong VALUES('glnc', '刚烈难存', 10, '使用夏侯惇在一�
 INSERT INTO zhangong VALUES('gmzc', '过目之才', 10, '使用☆SP庞统一回合内累计拿到至少16张牌', 0, 'shu', '1999-12-31 00:00:00', 'bgm_pangtong', 0, 0);
 INSERT INTO zhangong VALUES('gn', '果农', 15, '游戏开始时，起手4张“桃”', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('gqzl', '顾曲周郎', 10, '使用神周瑜连续至少4回合发动琴音回复体力', 0, 'god', '1999-12-31 00:00:00', 'shenzhouyu', 0, 0);
-INSERT INTO zhangong VALUES('gzwb', '固政为本', 10, '使用张昭张纮在一局游戏中利用技能“固政”获得雷击至少40张牌', 0, 'wu', '1999-12-31 00:00:00', 'erzhang', 0, 0);
-INSERT INTO zhangong VALUES('hjqy', '黄巾起义', 10, '使用张角在一局游戏中收到过群雄角色给的闪至少3张，发动至少3次雷击并击中对方', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
+INSERT INTO zhangong VALUES('gzwb', '固政为本', 10, '使用张昭张纮在一局游戏中利用技能“固政”获得累计至少40张牌', 0, 'wu', '1999-12-31 00:00:00', 'erzhang', 0, 0);
+INSERT INTO zhangong VALUES('hjqy', '黄巾起义', 10, '使用张角在一局游戏中收到过群雄角色给的闪至少3张，并至少三次雷击成功', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
 INSERT INTO zhangong VALUES('hlzms', '挥泪斩马谡', 10, '使用诸葛亮杀死马谡', 0, 'shu', '1999-12-31 00:00:00', 'zhugeliang', 0, 0);
 INSERT INTO zhangong VALUES('htdl', '黄天当立', 15, '使用张角在一局游戏中通过黄天得到的闪不少于8张', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
 INSERT INTO zhangong VALUES('hztx', '虎子同心', 10, '使用关兴张苞在父魂成功后，一个回合杀死至少三名反贼', 0, 'shu', '1999-12-31 00:00:00', 'guanxingzhangbao', 0, 0);
@@ -301,7 +301,7 @@ INSERT INTO zhangong VALUES('wabm', '唯爱不灭', 15, '使用任意武将在�
 INSERT INTO zhangong VALUES('wmsz', '无谋竖子', 10, '使用神吕布在一局游戏中发动无谋至少8次', 0, 'god', '1999-12-31 00:00:00', 'shenlvbu', 0, 0);
 INSERT INTO zhangong VALUES('wsww', '为时未晚', 15, '身为反贼，在一局游戏中杀死了除自己以外所有反贼并获得游戏的胜利', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('wxwd', '惟贤惟德', 10, '使用刘备在一个回合内发动仁德给的牌不少于10张', 0, 'shu', '1999-12-31 00:00:00', 'liubei', 0, 0);
-INSERT INTO zhangong VALUES('wyyd', '无言以对', 10, '使用徐庶在一局游戏中发动“无言”躲过南蛮入侵或万箭齐发雷击4次', 0, 'shu', '1999-12-31 00:00:00', 'xushu', 0, 0);
+INSERT INTO zhangong VALUES('wyyd', '无言以对', 10, '使用徐庶在一局游戏中发动“无言”躲过南蛮入侵或万箭齐发累计4次', 0, 'shu', '1999-12-31 00:00:00', 'xushu', 0, 0);
 INSERT INTO zhangong VALUES('wzxj', '稳重行军', 10, '使用于禁在一局游戏中发动“毅重”抵御至少4次黑色杀', 0, 'wei', '1999-12-31 00:00:00', 'yujin', 0, 0);
 INSERT INTO zhangong VALUES('xcdz', '星驰电走', 15, '在一局游戏中，累计出闪20次', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('xhdc', '雪痕敌耻', 10, '使用☆SP夏侯惇在一局游戏中，发动雪痕杀死一名角色', 0, 'wei', '1999-12-31 00:00:00', 'bgm_xiahoudun', 0, 0);

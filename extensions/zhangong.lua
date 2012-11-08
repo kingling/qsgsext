@@ -1035,7 +1035,7 @@ zgfunc[sgs.Todo].bnzw=function(self, room, event, player, data,isowner,name)
 end
 
 
--- hjqy :: 黄巾起义 :: 使用张角在一局游戏中收到过群雄角色给的闪至少3张，发动至少3次雷击并击中对方
+-- hjqy :: 黄巾起义 :: 使用张角在一局游戏中收到过群雄角色给的闪至少3张，并至少三次雷击成功
 --
 zgfunc[sgs.Todo].hjqy=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhangjiao' then return false end
@@ -1051,22 +1051,37 @@ end
 
 -- jjyb :: 戒酒以备 :: 使用高顺在一局游戏中使用技能“禁酒”将至少3张酒当成杀使用或打出
 --
-zgfunc[sgs.Todo].jjyb=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='gaoshun' then return false end
+zgfunc[sgs.CardFinished].jjyb=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getGeneralName()~="gaoshun" then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isKindOf("Slash") and card:getSubcards():first():isKindOf("Analeptic") then
+		addGameData(name,1)
+		if getGameData(name)==3 then addZhanGong(room,name) end
+	end
 end
 
 
 -- pjbl :: 片甲不留 :: 对一名角色发动猛进后导致其空城且装备区为空
 --
-zgfunc[sgs.Todo].pjbl=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='pangde' then return false end
+zgfunc[sgs.ChoiceMade].pjbl=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="pangde" then return false end
 end
 
 
 -- qldy :: 枪林弹雨 :: 使用袁绍在一回合内发动8次乱击
 --
-zgfunc[sgs.Todo].qldy=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='yuanshao' then return false end
+zgfunc[sgs.CardFinished].qldy=function(self, room, event, player, data,isowner,name)
+	if not isowner or player:getGeneralName()~="yuanshao" then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:getSkillName()=="luanji" then
+		addTurnData(name,1)
+		if getTurnData(name)==8 then
+			addZhanGong(room,name)
+		end
+	end
 end
 
 
@@ -1079,22 +1094,65 @@ end
 
 -- syqd :: 恃勇轻敌 :: 使用华雄在一局游戏中，在没有马岱在场的情况下由于体力上限减至0而死亡
 --
-zgfunc[sgs.Todo].syqd=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='huaxiong' then return false end
+zgfunc[sgs.Death].syqd=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="huaxiong" then return false end
+	if isowner and player:getMaxHp()<1 and room:findPlayer('madai',true) then
+		addZhanGong(room,name)
+	end
+end
+
+zgfunc[sgs.GameOverJudge].callback.yzrx=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~="huaxiong" then return false end
+	if isowner and player:getMaxHp()<1 and room:findPlayer('madai',true) then
+		addZhanGong(room,name)
+	end
 end
 
 
 -- yzrx :: 医者仁心 :: 使用华佗在一局游戏中对4个身份的人都发动过青囊，游戏结束亮明身份后获得
 --
-zgfunc[sgs.Todo].yzrx=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].yzrx=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
 	if  room:getOwner():getGeneralName()~='huatuo' then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	local tos=sgs.QList2Table(use.to)
+	if card:getSkillName()~="qingnang" and card:isKindOf("Peach") and #tos>0 then
+		local role=tos[1]:getRole()
+		if not string.find(getGameData(name,''),role) then
+			setGameData(name,getGameData(name)..role..",")
+		end
+	end
 end
 
+zgfunc[sgs.GameOverJudge].callback.yzrx=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='shensimayi' then return false end
+	local arr=string.sub(getGameData(name,','),1,-2):split(",")
+	if result=='win' and #arr==4 then
+		addZhanGong(room,name)
+	end
+end
 
 -- zsbsh :: 宗室遍四海 :: 使用刘表在一局游戏中利用技能“宗室”提高4手牌上限
 --
-zgfunc[sgs.Todo].zsbsh=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='liubiao' then return false end
+zgfunc[sgs.EventPhaseEnd].zsbsh=function(self, room, event, player, data,isowner,name)
+	if not isowner or player:getGeneralName()~="liubiao" then return false end
+	local getKingdoms=function()
+			local kingdoms={}
+			local kingdom_number=0
+			local players=room:getAlivePlayers()
+			for _,aplayer in sgs.qlist(players) do
+				if not kingdoms[aplayer:getKingdom()] then
+					kingdoms[aplayer:getKingdom()]=true
+					kingdom_number=kingdom_number+1
+				end
+			end
+			return kingdom_number
+		end
+	if getGameData(name)==0 and player:getPhase()~=sgs.Player_Discard and player:getHandcardNum()-player:getHp()>=4 and getKingdoms()==4 then
+		setGameData(name,1)
+		addZhanGong(room,name)
+	end
 end
 
 
