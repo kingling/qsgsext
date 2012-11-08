@@ -1125,8 +1125,29 @@ end
 
 -- hjqy :: 黄巾起义 :: 使用张角在一局游戏中收到过群雄角色给的闪至少3张，并至少三次雷击成功
 --
-zgfunc[sgs.Todo].hjqy=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardEffected].hjqy=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getGeneralName()~="zhangjiao" then return false end
+	local effect=data:toCardEffect()
+	if effect.card:isKindOf("HuangtianCard") and effect.card:getSubcards():first():isKindOf("Jink") then
+		setGameData(name..'jink',math.min(3,getGameData(name..'jink')+1))
+		if getGameData(name..'jink')==3 and getGameData(name..'leiji')==3 then
+			addZhanGong(room,name)
+			setGameData(name..'jink',-100)
+		end
+	end
+end
+
+zgfunc[sgs.FinishRetrial].hjqy=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhangjiao' then return false end
+	local judge=data:toJudge()
+	if judge.reason=="leiji" and judge:isBad() then
+		setGameData(name..'leiji',math.min(3,getGameData(name..'leiji')+1))
+		if getGameData(name..'jink')==3 and getGameData(name..'leiji')==3 then
+			addZhanGong(room,name)
+			setGameData(name..'jink',-100)
+		end
+	end
 end
 
 
@@ -1226,17 +1247,17 @@ end
 zgfunc[sgs.EventPhaseEnd].zsbsh=function(self, room, event, player, data,isowner,name)
 	if not isowner or player:getGeneralName()~="liubiao" then return false end
 	local getKingdoms=function()
-			local kingdoms={}
-			local kingdom_number=0
-			local players=room:getAlivePlayers()
-			for _,aplayer in sgs.qlist(players) do
-				if not kingdoms[aplayer:getKingdom()] then
-					kingdoms[aplayer:getKingdom()]=true
-					kingdom_number=kingdom_number+1
-				end
+		local kingdoms={}
+		local kingdom_number=0
+		local players=room:getAlivePlayers()
+		for _,aplayer in sgs.qlist(players) do
+			if not kingdoms[aplayer:getKingdom()] then
+				kingdoms[aplayer:getKingdom()]=true
+				kingdom_number=kingdom_number+1
 			end
-			return kingdom_number
 		end
+		return kingdom_number
+	end
 	if getGameData(name)==0 and player:getPhase()~=sgs.Player_Discard and player:getHandcardNum()-player:getHp()>=4 and getKingdoms()==4 then
 		setGameData(name,1)
 		addZhanGong(room,name)
