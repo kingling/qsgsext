@@ -1102,8 +1102,17 @@ end
 
 -- zzhs :: 智之化身 :: 使用黄月英在一局游戏发动20次集智至少20次
 --
-zgfunc[sgs.Todo].zzhs=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='huangyueying' then return false end
+zgfunc[sgs.CardFinished].zzhs=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if room:getOwner():getGeneralName()~='huangyueying' then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isNDTrick() then
+		addGameData(name,1)
+		if getGameData(name)==20 then
+			addZhanGong(room,name)
+		end
+	end
 end
 
 
