@@ -259,17 +259,22 @@ zgfunc[sgs.CardFinished].cqdd=function(self, room, event, player, data,isowner,n
 end
 
 
--- dxgl :: 东西宫略 :: 在一局游戏中，身份为男性主公，而忠臣为两名女性武将并获胜
+-- dgxl :: 东宫西略 :: 在一局游戏中，身份为男性主公，而忠臣为两名女性武将并在女性忠臣全部存活的情况下获胜
 --
 zgfunc[sgs.GameOverJudge].callback.dxgl=function(room,player,data,name,result)
 	if getGameData("hegemony")==1 then return false end
 	local female_loyalist = 0
+	local female_loyalist_alive = true
 	for _,op in sgs.qlist(room:getPlayers()) do
 		if op:getRole()=="loyalist" and op:isFemale() then
 			female_loyalist = female_loyalist+1
+			if not op:isAlive() then female_loyalist_alive = false end
 		end
 	end
-	if result =='win' and room:getOwner():isLord() and room:getOwner():isMale() and female_loyalist>=2 then addZhanGong(room,name) end
+	if result =='win' and room:getOwner():isLord() and room:getOwner():isMale()
+			and female_loyalist>=2 and female_loyalist_alive then
+		addZhanGong(room,name)
+	end
 end
 
 
@@ -519,7 +524,7 @@ zgfunc[sgs.GameOverJudge].callback.xnhx=function(room,player,data,name,result)
 end
 
 
--- ymds :: 驭马大师 :: 在一局游戏中，至少更换过6匹马
+-- ymds :: 驭马大师 :: 在一局游戏中，至少更换过8匹马
 --
 zgfunc[sgs.Todo].ymds=function(self, room, event, player, data,isowner,name)
 

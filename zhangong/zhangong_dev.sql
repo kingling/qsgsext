@@ -242,7 +242,7 @@ INSERT INTO zhangong VALUES('dcxj', '雕虫小技', 10, '使用卧龙在一局�
 INSERT INTO zhangong VALUES('dkjj', '荡寇将军', 10, '使用程普在一局游戏中，发动技能“疠火”杀死至少三名反贼最终获得胜利', 0, 'wu', '1999-12-31 00:00:00', 'chengpu', 0, 0);
 INSERT INTO zhangong VALUES('dkzz', '杜康之子', 10, '使用曹植在一局游戏中发动酒诗后成功用杀造成伤害累计5次', 0, 'wei', '1999-12-31 00:00:00', 'caozhi', 0, 0);
 INSERT INTO zhangong VALUES('dqzw', '大权在握', 10, '使用钟会在一局游戏中有超过8张权', 0, 'wei', '1999-12-31 00:00:00', 'zhonghui', 0, 0);
-INSERT INTO zhangong VALUES('dgxl', '东宫西略', 15, '在一局游戏中，身份为男性主公，而忠臣为两名女性武将并获胜', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('dgxl', '东宫西略', 15, '在一局游戏中，身份为男性主公，而忠臣为两名女性武将并在女性忠臣全部存活的情况下获胜', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('dym', '大姨妈', 10, '使用甄姬连续5回合洛神的第一次结果都是红色，不包括改判', 0, 'wei', '1999-12-31 00:00:00', 'zhenji', 0, 0);
 INSERT INTO zhangong VALUES('dyzh', '当阳之吼', 10, '在一局游戏中，使用☆SP张飞累计两次在大喝拼点成功的回合中用红“杀”手刃一名角色', 0, 'shu', '1999-12-31 00:00:00', 'bgm_zhangfei', 0, 0);
 INSERT INTO zhangong VALUES('fpz', '方片周', 10, '使用周瑜在一局游戏中累计4次反间都被对方猜中并拿走方片手牌', 0, 'wu', '1999-12-31 00:00:00', 'zhouyu', 0, 0);
@@ -313,7 +313,7 @@ INSERT INTO zhangong VALUES('xxf', '小旋风', 10, '使用凌统在一局游戏
 INSERT INTO zhangong VALUES('xysc', '小有所成', 15, '进行100局游戏', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('xzxm', '先知续命', 10, '使用郭嘉在一局游戏中利用技能“天妒”收进至少4个桃', 0, 'wei', '1999-12-31 00:00:00', 'guojia', 0, 0);
 INSERT INTO zhangong VALUES('ybyt', '义薄云天', 10, '使用SP关羽在觉醒后杀死两个反贼并最后获胜', 0, 'wei', '1999-12-31 00:00:00', 'sp_guanyu', 0, 0);
-INSERT INTO zhangong VALUES('ymds', '驭马大师', 15, '在一局游戏中，至少更换过6匹马', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('ymds', '驭马大师', 15, '在一局游戏中，至少更换过8匹马', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('ynnd', '有难你当', 10, '使用小乔在一局游戏中发动“天香”导致一名其他角色死亡', 0, 'wu', '1999-12-31 00:00:00', 'xiaoqiao', 0, 0);
 INSERT INTO zhangong VALUES('yrbf', '隐忍不发', 10, '使用神司马懿在一局游戏中发动忍戒至少10次并获胜', 0, 'god', '1999-12-31 00:00:00', 'shensimayi', 0, 0);
 INSERT INTO zhangong VALUES('ysadj', '以死安大局', 10, '使用马谡在一局游戏中发动“挥泪”使一名角色弃置8张牌', 0, 'shu', '1999-12-31 00:00:00', 'masu', 0, 0);
