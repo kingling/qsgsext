@@ -1212,8 +1212,14 @@ end
 
 -- bnzw :: 暴虐之王 :: 使用董卓在一局游戏中利用技能“暴虐”至少回血10次
 --
-zgfunc[sgs.Todo].bnzw=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.HpRecover].bnzw=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='dongzhuo' then return false end
+	if not isowner then return false end
+	local recover=data:toRecover()
+	if player:hasFlag("baonueused") then
+		addGameData(name,1)
+		if getGameData(name)==10 then addZhanGong(room,name) end
+	end
 end
 
 
@@ -1290,8 +1296,28 @@ end
 
 -- sbfs :: 生不逢时 :: 使用双雄对关羽使用决斗，并因这个决斗被关羽杀死
 --
-zgfunc[sgs.Todo].sbfs=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].sbfs=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='yanliangwenchou' then return false end
+	if not isowner then return false end
+	local damage=data:toDamage()
+	if not (damage or damage.from) then return false end
+	local dname=damage.from:getGeneralName()
+	if (dname=="guanyu" or dname=="sp_guanyu" or dname=="shenguanyu" or dname=="neo_guanyu") 
+		and damage.card:isKindOf("Duel") then
+		addZhanGong(room,name)
+	end
+end
+
+
+zgfunc[sgs.GameOverJudge].callback.sbfs=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='yanliangwenchou' then return false end
+	local damage=data:toDamage()
+	if not (damage or damage.from) then return false end
+	local dname=damage.from:getGeneralName()
+	if (dname=="guanyu" or dname=="sp_guanyu" or dname=="shenguanyu" or dname=="neo_guanyu") 
+		and damage.card:isKindOf("Duel") then
+		addZhanGong(room,name)
+	end
 end
 
 
