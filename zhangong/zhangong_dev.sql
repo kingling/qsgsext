@@ -255,7 +255,7 @@ INSERT INTO zhangong VALUES('gqzl', '顾曲周郎', 10, '使用神周瑜连续�
 INSERT INTO zhangong VALUES('gzwb', '固政为本', 10, '使用张昭张纮在一局游戏中利用技能“固政”获得雷击至少40张牌', 0, 'wu', '1999-12-31 00:00:00', 'erzhang', 0, 0);
 INSERT INTO zhangong VALUES('hjqy', '黄巾起义', 10, '使用张角在一局游戏中收到过群雄角色给的闪至少3张，发动至少3次雷击并击中对方', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
 INSERT INTO zhangong VALUES('hlzms', '挥泪斩马谡', 10, '使用诸葛亮杀死马谡', 0, 'shu', '1999-12-31 00:00:00', 'zhugeliang', 0, 0);
-INSERT INTO zhangong VALUES('htdl', '黄天当立', 15, '使用张角在一局游戏中通过黄天得到的闪不少于8张', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('htdl', '黄天当立', 15, '使用张角在一局游戏中通过黄天得到的闪不少于8张', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
 INSERT INTO zhangong VALUES('hztx', '虎子同心', 10, '使用关兴张苞在父魂成功后，一个回合杀死至少三名反贼', 0, 'shu', '1999-12-31 00:00:00', 'guanxingzhangbao', 0, 0);
 INSERT INTO zhangong VALUES('jcyd', '将驰有度', 10, '使用曹彰发动将驰的两种效果各连续两回合', 0, 'wei', '1999-12-31 00:00:00', 'caozhang', 0, 0);
 INSERT INTO zhangong VALUES('jdfy', '绝对防御', 15, '在一局游戏中，使用八挂累计出闪20次', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
