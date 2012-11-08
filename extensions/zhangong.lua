@@ -1102,9 +1102,22 @@ end
 
 -- gqzl :: 顾曲周郎 :: 使用神周瑜连续至少4回合发动琴音回复体力
 --
-zgfunc[sgs.Todo].gqzl=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='shenzhouyu' then return false end
+zgfunc[sgs.ChoiceMade].gqzl=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="shenzhouyu" then return false end
+	if not isowner then return false end
+	local choices= data:toString():split(":")
+	if choices[1]=="skillChoice"  and  choices[2]=="qinyin" and choices[3]=="up" then
+		setGameData(name,string.format("%s%d,",getGameData(name,''),getGameData('turncount')))
+		local arr=string.sub(getGameData(name),1,-2):split(",")
+		if #arr>=4 then
+			if arr[#arr]-arr[#arr-1]==1 and arr[#arr-1]-arr[#arr-2]==1 and arr[#arr-2]-arr[#arr-3]==1 then
+				addZhanGong(room,name)
+				setGameData(name,'')
+			end
+		end
+	end
 end
+
 
 
 -- jjfs :: 绝境逢生 :: 使用神赵云在一局游戏中一直为一滴血的情况下并获胜
@@ -1116,22 +1129,78 @@ end
 
 -- lpkd :: 连破克敌 :: 使用神司马懿在一局游戏中发动3次连破并最后获胜
 --
-zgfunc[sgs.Todo].lpkd=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.ChoiceMade].lpkd=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="shensimayi" then return false end
+	if not isowner then return false end
+	local choices= data:toString():split(":")
+	if choices[1]=="skillInvoke"  and  choices[2]=="lianpo" and choices[3]=="yes" then
+		addGameData(name,1)
+	end
+end
+
+zgfunc[sgs.GameOverJudge].callback.lpkd=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='shensimayi' then return false end
+	if result=='win' and getGameData(name)>=3 then
+		addZhanGong(room,name)
+	end
 end
 
 
 -- sfgj :: 三分归晋 :: 使用神司马懿杀死刘备，孙权，曹操各累计10次
 --
-zgfunc[sgs.Todo].sfgj=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='shensimayi' then return false end
+zgfunc[sgs.Death].sfgj=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="shensimayi" then return false end
+	local damage=data:toDamageStar()
+	local victim=player:getGeneralName()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() and
+			(victim=='liubei' or victim=='sunquan' or victim=='caocao') then
+		addGlobalData(name..victim,1)
+		if getGlobalData(name..'liubei')>=10 and getGlobalData(name..'sunquan')>=10 and getGlobalData(name..'caocao')>=10 then
+			addZhanGong(room,name)
+			setGlobalData(name..'liubei',-100)
+			setGlobalData(name..'sunquan',-100)
+			setGlobalData(name..'caocao',-100)
+		end
+	end
 end
 
+zgfunc[sgs.GameOverJudge].callback.sfgj=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~="shensimayi" then return false end
+	local damage=data:toDamageStar()
+	local victim=player:getGeneralName()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() and
+			(victim=='liubei' or victim=='sunquan' or victim=='caocao') then
+		addGlobalData(name..victim,1)
+		if getGlobalData(name..'liubei')>=10 and getGlobalData(name..'sunquan')>=10 and getGlobalData(name..'caocao')>=10 then
+			addZhanGong(room,name)
+			setGlobalData(name..'liubei',-100)
+			setGlobalData(name..'sunquan',-100)
+			setGlobalData(name..'caocao',-100)
+		end
+	end
+end
 
 -- shgx :: 四海归心 :: 使用神曹操在一局游戏中受到2点伤害之后发动2次归心
 --
-zgfunc[sgs.Todo].shgx=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='shencaocao' then return false end
+zgfunc[sgs.ChoiceMade].shgx=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="shencaocao" then return false end
+	if not isowner then return false end
+	local choices= data:toString():split(":")
+	if choices[1]=="skillInvoke"  and  choices[2]=="guixin" and choices[3]=="yes" then
+		addTurnData(name,1)
+		if getTurnData(name)==2 and getTurnData(name.."damage")==1 then
+			addZhanGong(room,name)
+		end
+	end
+end
+
+zgfunc[sgs.Damaged].shgx=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if  room:getOwner():getGeneralName()~="shencaocao" then return false end
+	local damage = data:toDamage()
+	if damage.damage==2 then
+		setTurnData(name.."damage",1)
+	end
 end
 
 
@@ -1144,32 +1213,84 @@ end
 
 -- tyzm :: 桃园之梦 :: 使用神关羽在一局游戏中阵亡后发动武魂判定结果为桃园结义
 --
-zgfunc[sgs.Todo].tyzm=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.FinishRetrial].tyzm=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='shenguanyu' then return false end
+	local judge=data:toJudge()
+	if judge.reason=="wuhun" and judge.card:isKindOf("GodSalvation") then
+		addZhanGong(room,name)
+	end
 end
 
 
--- wmsz :: 无谋竖子 :: 使用神吕布在一局游戏中发动无谋至少6次
+-- wmsz :: 无谋竖子 :: 使用神吕布在一局游戏中发动无谋至少8次
 --
-zgfunc[sgs.Todo].wmsz=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='shenlvbu' then return false end
+zgfunc[sgs.CardFinished].wmsz=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if room:getOwner():getGeneralName()~='shenlvbu' then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isNDTrick() then
+		addGameData(name,1)
+		if getGameData(name)==8 then
+			addZhanGong(room,name)
+		end
+	end
 end
 
 
 -- yrbf :: 隐忍不发 :: 使用神司马懿在一局游戏中发动忍戒至少10次并获胜
 --
-zgfunc[sgs.Todo].yrbf=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardDiscarded].yrbf=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
 	if  room:getOwner():getGeneralName()~='shensimayi' then return false end
+	if player:getPhase()~=sgs.Player_Discard then return false end
+	local card = data:toCard()
+	addGameData(name,card:subcardsLength())
 end
 
+zgfunc[sgs.Damaged].yrbf=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if  room:getOwner():getGeneralName()~='shensimayi' then return false end
+	local damage = data:toDamage()
+	addGameData(name,damage.damage)
+end
+
+zgfunc[sgs.GameOverJudge].callback.yrbf=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='shensimayi' then return false end
+	if result=='win' and getGameData(name)>=10 then
+		addZhanGong(room,name)
+	end
+end
 
 -- zszn :: 战神之怒 :: 使用神吕布在一局游戏中发动至少4次神愤、3次无前
 --
-zgfunc[sgs.Todo].zszn=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='shenlvbu' then return false end
+zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,name)
+	if room:getOwner():getGeneralName()~="shenlvbu" then return false end
+	if not isowner then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isKindOf("ShenfenCard") then
+		setGameData(name..'shenfen',math.min(4,getGameData(name..'shenfen')+1))
+		if getGameData(name..'shenfen')==4 and getGameData(name..'wuqian')==3 then
+			addZhanGong(room,name)
+			setGameData(name..'shenfen',-100)
+		end
+	end
 end
 
-
+zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,name)
+	if room:getOwner():getGeneralName()~="shenlvbu" then return false end
+	if not isowner then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isKindOf("WuqianCard") then
+		setGameData(name..'wuqian',math.min(3,getGameData(name..'wuqian')+1))
+		if getGameData(name..'shenfen')==4 and getGameData(name..'wuqian')==3 then
+			addZhanGong(room,name)
+			setGameData(name..'shenfen',-100)
+		end
+	end
+end
 
 
 

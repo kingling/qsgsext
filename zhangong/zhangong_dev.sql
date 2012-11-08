@@ -298,7 +298,7 @@ INSERT INTO zhangong VALUES('tmzf', '天命之罚', 10, '在一局游戏中，�
 INSERT INTO zhangong VALUES('tyzm', '桃园之梦', 10, '使用神关羽在一局游戏中阵亡后发动武魂判定结果为桃园结义', 0, 'god', '1999-12-31 00:00:00', 'shenguanyu', 0, 0);
 INSERT INTO zhangong VALUES('tyzy', '桃园之义', 15, '在一局游戏中，场上同时存在刘备、关羽、张飞三人且为队友，而你是其中一个并最后获胜', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('wabm', '唯爱不灭', 15, '使用任意武将在一局游戏中被步练师发动过追忆并最后获胜。', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
-INSERT INTO zhangong VALUES('wmsz', '无谋竖子', 10, '使用神吕布在一局游戏中发动无谋至少6次', 0, 'god', '1999-12-31 00:00:00', 'shenlvbu', 0, 0);
+INSERT INTO zhangong VALUES('wmsz', '无谋竖子', 10, '使用神吕布在一局游戏中发动无谋至少8次', 0, 'god', '1999-12-31 00:00:00', 'shenlvbu', 0, 0);
 INSERT INTO zhangong VALUES('wsww', '为时未晚', 15, '身为反贼，在一局游戏中杀死了除自己以外所有反贼并获得游戏的胜利', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('wxwd', '惟贤惟德', 10, '使用刘备在一个回合内发动仁德给的牌不少于10张', 0, 'shu', '1999-12-31 00:00:00', 'liubei', 0, 0);
 INSERT INTO zhangong VALUES('wyyd', '无言以对', 10, '使用徐庶在一局游戏中发动“无言”躲过南蛮入侵或万箭齐发雷击4次', 0, 'shu', '1999-12-31 00:00:00', 'xushu', 0, 0);
