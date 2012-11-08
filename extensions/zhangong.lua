@@ -242,7 +242,7 @@ zgfunc[sgs.CardFinished].cqb=function(self, room, event, player, data,isowner,na
 	local use = data:toCardUse()
 	if use.card:isKindOf("Dismantlement") or use.card:isKindOf("Snatch") then
 		addTurnData(name,1)
-		if getTurnData(name)==10 then addZhanGong(room,name) end
+		if getTurnData(name)==4 then addZhanGong(room,name) end
 	end
 end
 
@@ -675,11 +675,11 @@ zgfunc[sgs.CardFinished].ssex=function(self, room, event, player, data,isowner,n
 	if not isowner then return false end
 	local x=player:getHandcardNum()
 	local y=data:toCardUse().card:getSubcards():length()
-	for i=1, y, 1 do
-		if player:getHandcards()[x-y+i]):isKindOf("Peach") then
+	for i=0, y-1, 1 do
+		if player:getHandcards():at(x-y+i):isKindOf("Peach") then
 			addGameData(name.."_peach",1)
 			if getGameData(name.."_peach)==4 and getGameData(name.."_exnihilo")==4 then addZhanGong(room,name) end
-		elseif player:getHandcards()[x-y+i]):isKindOf("ExNihilo") then
+		elseif player:getHandcards():at(x-y+i):isKindOf("ExNihilo") then
 			addGameData(name.."_exnihilo",1)
 			if getGameData(name.."_peach)==4 and getGameData(name.."_exnihilo")==4 then addZhanGong(room,name) end
 		end
