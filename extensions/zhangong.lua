@@ -975,7 +975,7 @@ end
 zgfunc[sgs.Death].xhdc=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='bgm_xiahoudun' then return false end
 	local damage=data:toDamageStar()
-	if damage and damage.fro and damage.card and damage.card:getSkillName()=="xuehan" 
+	if damage and damage.from and damage.card and damage.card:getSkillName()=="xuehan" 
 		and damage.from:objectName()==room:getOwner():objectName() then
 		addZhanGong(room,name)
 	end
@@ -1152,7 +1152,8 @@ end
 zgfunc[sgs.Death].hztx=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='guanxingzhangbao' then return false end
 	local damage=data:toDamage()
-	if damage.from:objectName()==room:getOwner():objectName() and damage.from:hasFlag("fuhun") and damage.to:getRole()=="rebel" then
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() 
+		and damage.from:hasFlag("fuhun") and damage.to:getRole()=="rebel" then
 		addTurnData(name,1)
 		if getTurnData(name)==3 then addZhanGong(room,name) end
 	end
