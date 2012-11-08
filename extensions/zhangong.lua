@@ -713,8 +713,21 @@ end
 
 -- ynnd :: 有难你当 :: 使用小乔在一局游戏中发动“天香”导致一名其他角色死亡
 --
-zgfunc[sgs.Todo].ynnd=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].ynnd=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='xiaoqiao' then return false end
+	local damage=data:toDamageStar()
+	if damage and damage.to:hasFlag("TianxiangTarget") then
+		addZhanGong(room,name)
+	end
+end
+
+
+zgfunc[sgs.GameOverJudge].callback.ynnd=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='xiaoqiao' then return false end
+	local damage=data:toDamageStar()
+	if damage and damage.to:hasFlag("TianxiangTarget") then
+		addZhanGong(room,name)
+	end
 end
 
 
@@ -1498,8 +1511,17 @@ end
 
 -- swzs :: 神威之势 :: 使用神赵云发动各花色龙魂各两次并在存活的情况下取得游戏胜利
 --
-zgfunc[sgs.Todo].swzs=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].swzs=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='shenzhaoyun' then return false end
+	if not isowner then return false end
+	local use=data:toCardUse()
+	if use.card:getSkillName()=="longhun" then
+		addGameData(name..use.card:getSuitString(),1)
+		if getGameData(name..Spade)==2 and getGameData(name..Heart)==2 and getGameData(name..Club)==2
+			and getGameData(name..Diamond)==2 then
+			addZhanGong(room,name)
+		end
+	end
 end
 
 
