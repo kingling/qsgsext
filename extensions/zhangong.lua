@@ -1025,8 +1025,27 @@ end
 
 -- dyzh :: 当阳之吼 :: 在一局游戏中，使用☆SP张飞累计两次在大喝拼点成功的回合中用红“杀”手刃一名角色
 --
-zgfunc[sgs.Todo].dyzh=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].dyzh=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='bgm_zhangfei' then return false end
+	local damage=data:toDamageStar()
+	if damage.from:hasFlag("dahe") and damage.from==room:getOwner():objectName() and damage.card:isKindOf("Slash")
+		and damage.card:isRed() then
+		addGameData(name,1)
+		if getGameData(name)==2 then addZhanGong(room,name)
+	end
+end
+
+
+-- dyzh :: 当阳之吼 :: 在一局游戏中，使用☆SP张飞累计两次在大喝拼点成功的回合中用红“杀”手刃一名角色
+--
+zgfunc[sgs.GameOverJudge].callback.dyzh=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='bgm_zhangfei' then return false end
+	local damage=data:toDamageStar()
+	if damage.from:hasFlag("dahe") and damage.from==room:getOwner():objectName() and damage.card:isKindOf("Slash")
+		and damage.card:isRed() then
+		addGameData(name,1)
+		if getGameData(name)==2 then addZhanGong(room,name)
+	end
 end
 
 
@@ -1039,22 +1058,61 @@ end
 
 -- hlzms :: 挥泪斩马谡 :: 使用诸葛亮杀死马谡
 --
-zgfunc[sgs.Todo].hlzms=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].hlzms=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhugeliang' then return false end
+	local damage=data:toDamage()
+	if damage.from:objectName()==room:getOwner():objectName() and damage.to:getGeneralName()=="masu" then
+		addZhanGong(room,name)
+	end
+end
+
+
+-- hlzms :: 挥泪斩马谡 :: 使用诸葛亮杀死马谡
+--
+zgfunc[sgs.GameOverJudge].callback.hlzms=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='zhugeliang' then return false end
+	local damage=data:toDamage()
+	if damage.from:objectName()==room:getOwner():objectName() and damage.to:getGeneralName()=="masu" then
+		addZhanGong(room,name)
+	end
 end
 
 
 -- hztx :: 虎子同心 :: 使用关兴张苞在父魂成功后，一个回合杀死至少三名反贼
 --
-zgfunc[sgs.Todo].hztx=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].hztx=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='guanxingzhangbao' then return false end
+	local damage=data:toDamage()
+	if damage.from:objectName()==room:getOwner():objectName() and damage.from:hasFlag("fuhun") and damage.to:getRole()=="rebel" then
+		addTurnData(name,1)
+		if getTurnData(name)==3 then addZhanGong(room,name) end
+	end
+end
+
+
+-- hztx :: 虎子同心 :: 使用关兴张苞在父魂成功后，一个回合杀死至少三名反贼
+--
+zgfunc[sgs.GameOverJudge].callback.hztx=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='guanxingzhangbao' then return false end
+	local damage=data:toDamage()
+	if damage.from:objectName()==room:getOwner():objectName() and damage.from:hasFlag("fuhun") and damage.to:getRole()=="rebel" then
+		addTurnData(name,1)
+		if getTurnData(name)==3 then addZhanGong(room,name) end
+	end
 end
 
 
 -- rxbz :: 仁心布众 :: 使用刘备在一局游戏中，累计仁德至少30张牌
 --
-zgfunc[sgs.Todo].rxbz=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].rxbz=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='liubei' then return false end
+	local use=data:toCardUse()
+	if use.from:objectName()==room:getOwner():objectName() and use.card:isKindOf("RendeCard") then
+		for i=1, use.card:getSubcards():length(), 1 do
+			addGameData(name,1)
+			if getGameData(name)==30 then addZhanGong(room,name) end
+		end
+	end
 end
 
 
