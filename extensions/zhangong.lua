@@ -606,7 +606,7 @@ zgfunc[sgs.CardFinished].jfhz=function(self, room, event, player, data,isowner,n
 	local use=data:toCardUse()
 	if use.to:getGeneralName()=="sunquan" and use.card:getSkillName()=="jiefan" then
 		addGameData(name,1)
-		if getGameData(name)==2 then addZhanGong(room, name) end"=
+		if getGameData(name)==2 then addZhanGong(room, name) end
 	end
 end
 
