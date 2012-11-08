@@ -414,34 +414,30 @@ end
 zgfunc[sgs.GameOverJudge].callback.tyzy=function(room,player,data,name,result)
 	if result~='win' then return false end
 	local has_liubei,has_guanyu,has_zhangfei,issjy=false,false,false,false
-	function isTeammate(room,a,b)
-		if getGameData("hegemony")==1 then
-			return a:getKingdom()==b:getKingdom()
-		else
-			local ar=a:getRole()
-			local br=b:getRole()
-			if ar=="lord" or ar=="loyalist" then ar=="lord+loyalist" end
-			if br=="lord" or ar=="loyalist" then br=="lord+loyalist" end
-			if room:getMode()=='06_3v3' then				
-				if ar=="rebel" or ar=="renegade" then ar=="rebel+renegade" end
-				if br=="rebel" or br=="renegade" then br=="rebel+renegade" end
-			end
-			return ar==br
-		end
-	end
 	local owner = room:getOwner()
 	for _,ap in sgs.qlist(room:getPlayers()) do
-		if isTeammate(room,owner,ap) then
-			local gname = ap:getGeneralName()
+		local gname = ap:getGeneralName()
+		local role1=owner:getRole()
+		local role2=ap:getRole()
+		if role1=="lord" then role1="loyalist" end
+		if role2=="lord" then role2="loyalist" end
+		if room:getMode() == "06_3v3" then
+			if role1=="renegade" then role1="rebel" end
+			if role2=="renegade" then role2="rebel" end
+		end
+		local diffgroup =false
+		if role1~=role2 then diffgroup=true end
+		if role1=="renegade" or role2=="renegade" then diffgroup=true end
+		if not diffgroup then
 			if gname=="liubei" or gname=="bgm_liubei" then
 				has_liubei=true
-				if owner:objectName()==ap:objectName() then issjy==true
+				if owner:objectName()==ap:objectName() then issjy==true end
 			elseif gname=="guanyu" or gname=="shenguanyu" or gname=="sp_guanyu" or gname=="neo_guanyu" then
 				has_guanyu=true
-				if owner:objectName()==ap:objectName() then issjy==true
+				if owner:objectName()==ap:objectName() then issjy==true end
 			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname=="bgm_zhangfei" then
 				has_zhangfei=true
-				if owner:objectName()==ap:objectName() then issjy==true
+				if owner:objectName()==ap:objectName() then issjy==true end
 			end
 		end
 	end
@@ -1023,8 +1019,25 @@ end
 
 -- cbyx :: 长坂英雄 :: 使用赵云在一局游戏中，在刘禅为队友且存活情况下获胜
 --
-zgfunc[sgs.Todo].cbyx=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.GameOverJudge].callback.cbyx=function(room,player,data,name,result))
 	if  room:getOwner():getGeneralName()~='zhaoyun' then return false end
+	if result~='win' then return false end
+	for _,ap in sgs.qlist(room:getAlivePlayers()) do
+		local role1=room:getOwner():getRole()
+		local role2=ap:getRole()
+		if role1=="lord" then role1="loyalist" end
+		if role2=="lord" then role2="loyalist" end
+		if room:getMode() == "06_3v3" then
+			if role1=="renegade" then role1="rebel" end
+			if role2=="renegade" then role2="rebel" end
+		end
+		local diffgroup =false
+		if role1~=role2 then diffgroup=true end
+		if role1=="renegade" or role2=="renegade" then diffgroup=true end
+		if diffgroup==false and ap:getGeneralName()=="liushan" then
+			addZhanGong(room,name)
+		end
+	end
 end
 
 
@@ -1166,8 +1179,47 @@ end
 
 -- xlwzy :: 星落五丈原 :: 使用诸葛亮，在司马懿为敌方时阵亡
 --
-zgfunc[sgs.Todo].xlwzy=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.Death].xlwzy=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhugeliang' then return false end
+	if not isowner then return false end
+	for _,ap in sgs.qlist(room:getPlayers()) do
+		local role1=room:getOwner():getRole()
+		local role2=ap:getRole()
+		if role1=="lord" then role1="loyalist" end
+		if role2=="lord" then role2="loyalist" end
+		if room:getMode() == "06_3v3" then
+			if role1=="renegade" then role1="rebel" end
+			if role2=="renegade" then role2="rebel" end
+		end
+		local diffgroup =false
+		if role1~=role2 then diffgroup=true end
+		if role1=="renegade" or role2=="renegade" then diffgroup=true end
+		if diffgroup==true and (ap:getGeneralName()=="simayi" or ap:getGeneralName()=="shensimayi") then
+			addZhanGong(room,name)
+		end
+	end
+end
+
+
+zgfunc[sgs.GameOverJudge].callback.xlwzy=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~='zhugeliang' then return false end
+	if player:objectName()~=room:getOwner():objectName() then return false end
+	for _,ap in sgs.qlist(room:getPlayers()) do
+		local role1=room:getOwner():getRole()
+		local role2=ap:getRole()
+		if role1=="lord" then role1="loyalist" end
+		if role2=="lord" then role2="loyalist" end
+		if room:getMode() == "06_3v3" then
+			if role1=="renegade" then role1="rebel" end
+			if role2=="renegade" then role2="rebel" end
+		end
+		local diffgroup =false
+		if role1~=role2 then diffgroup=true end
+		if role1=="renegade" or role2=="renegade" then diffgroup=true end
+		if diffgroup==true and (ap:getGeneralName()=="simayi" or ap:getGeneralName()=="shensimayi") then
+			addZhanGong(room,name)
+		end
+	end
 end
 
 
