@@ -1174,8 +1174,23 @@ end
 
 -- zmjzg :: 走马见诸葛 :: 使用徐庶在一局游戏中至少有3次举荐诸葛且用于举荐的牌里必须有马
 --
-zgfunc[sgs.Todo].zmjzg=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].zmjzg=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='xushu' then return false end
+	if not isowner then return false end
+	local use=data:toCardUse()
+	if use.from:objectName()==room:getOwner():objectName() and use.card:isKindOf("JujianCard") 
+		and (use.to:getGeneralName()=="zhugeliang" or use.to:getGeneralName()=="wolong" or use.to:getGeneralName()=="shenzhugeliang") then
+		local has_horse=false
+		for _,cd in sgs.qlist(use.card:getSubcards()) do
+			if sgs.Sanguosha:getCard(cd):isKindOf("Horse") then
+				has_horse=true
+			end
+		end 
+		if has_horse then
+			addGameData(name,1)
+			if getGameData(name)==3 then addZhanGong(room,name) end
+		end
+	end
 end
 
 
