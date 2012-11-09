@@ -21,6 +21,7 @@ zgfunc[sgs.CardsMoveOneTime]={}
 zgfunc[sgs.CardDiscarded]={}
 zgfunc[sgs.CardResponsed]={}
 zgfunc[sgs.ChoiceMade]={}
+zgfunc[sgs.CardResponsed]={}
 
 
 zgfunc[sgs.ConfirmDamage]={}
@@ -51,6 +52,8 @@ zgfunc[sgs.Pindian]={}
 
 sgs.Todo=9999
 zgfunc[sgs.Todo]={}
+
+myroom=nil
 
 require "sqlite3"
 db = sqlite3.open("./zhangong/zhangong_dev.data")
@@ -939,9 +942,9 @@ zgfunc[sgs.CardFinished].qjbc=function(self, room, event, player, data,isowner,n
 	if  room:getOwner():getGeneralName()~='xunyou' then return false end
 	if not isowner then return false end
 	local use=data:toCardUse()
-	if use.card:getSkillName()=="qice" and getGameData(name..use.card:objectName())==0 then
+	if use.card:getSkillName()=="qice" and getGameData(name..'_'..use.card:objectName())==0 then
 		addGameData(name,1)
-		addGameData(name..use.card:objectName(),1)
+		addGameData(name..'_'..use.card:objectName(),1)
 		if getGameData(name)==6 then addZhanGong(room,name) end
 	end
 end
@@ -1421,10 +1424,10 @@ zgfunc[sgs.CardEffected].hjqy=function(self, room, event, player, data,isowner,n
 	if player:getGeneralName()~="zhangjiao" then return false end
 	local effect=data:toCardEffect()
 	if effect.card:isKindOf("HuangtianCard") and effect.card:getSubcards():first():isKindOf("Jink") then
-		setGameData(name..'jink',math.min(3,getGameData(name..'jink')+1))
-		if getGameData(name..'jink')==3 and getGameData(name..'leiji')==3 then
+		setGameData(name..'_jink',math.min(3,getGameData(name..'_jink')+1))
+		if getGameData(name..'_jink')==3 and getGameData(name..'_leiji')==3 then
 			addZhanGong(room,name)
-			setGameData(name..'jink',-100)
+			setGameData(name..'_jink',-100)
 		end
 	end
 end
@@ -1433,10 +1436,10 @@ zgfunc[sgs.FinishRetrial].hjqy=function(self, room, event, player, data,isowner,
 	if  room:getOwner():getGeneralName()~='zhangjiao' then return false end
 	local judge=data:toJudge()
 	if judge.reason=="leiji" and judge:isBad() then
-		setGameData(name..'leiji',math.min(3,getGameData(name..'leiji')+1))
-		if getGameData(name..'jink')==3 and getGameData(name..'leiji')==3 then
+		setGameData(name..'_leiji',math.min(3,getGameData(name..'_leiji')+1))
+		if getGameData(name..'_jink')==3 and getGameData(name..'_leiji')==3 then
 			addZhanGong(room,name)
-			setGameData(name..'jink',-100)
+			setGameData(name..'_jink',-100)
 		end
 	end
 end
@@ -1634,13 +1637,13 @@ zgfunc[sgs.Death].sfgj=function(self, room, event, player, data,isowner,name)
 	local damage=data:toDamageStar()
 	local victim=player:getGeneralName()
 	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() and
-			(victim=='liubei' or victim=='sunquan' or victim=='caocao') then
-		addGlobalData(name..victim,1)
-		if getGlobalData(name..'liubei')>=10 and getGlobalData(name..'sunquan')>=10 and getGlobalData(name..'caocao')>=10 then
+			(victim=='liubei' or victim=='_sunquan' or victim=='_caocao') then
+		addGlobalData(name..'_'..victim,1)
+		if getGlobalData(name..'_liubei')>=10 and getGlobalData(name..'_sunquan')>=10 and getGlobalData(name..'_caocao')>=10 then
 			addZhanGong(room,name)
-			setGlobalData(name..'liubei',-100)
-			setGlobalData(name..'sunquan',-100)
-			setGlobalData(name..'caocao',-100)
+			setGlobalData(name..'_liubei',-100)
+			setGlobalData(name..'_sunquan',-100)
+			setGlobalData(name..'_caocao',-100)
 		end
 	end
 end
@@ -1650,13 +1653,13 @@ zgfunc[sgs.GameOverJudge].callback.sfgj=function(room,player,data,name,result)
 	local damage=data:toDamageStar()
 	local victim=player:getGeneralName()
 	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() and
-			(victim=='liubei' or victim=='sunquan' or victim=='caocao') then
-		addGlobalData(name..victim,1)
-		if getGlobalData(name..'liubei')>=10 and getGlobalData(name..'sunquan')>=10 and getGlobalData(name..'caocao')>=10 then
+			(victim=='_liubei' or victim=='_sunquan' or victim=='_caocao') then
+		addGlobalData(name..'_'..victim,1)
+		if getGlobalData(name..'_liubei')>=10 and getGlobalData(name..'_sunquan')>=10 and getGlobalData(name..'_caocao')>=10 then
 			addZhanGong(room,name)
-			setGlobalData(name..'liubei',-100)
-			setGlobalData(name..'sunquan',-100)
-			setGlobalData(name..'caocao',-100)
+			setGlobalData(name..'_liubei',-100)
+			setGlobalData(name..'_sunquan',-100)
+			setGlobalData(name..'_caocao',-100)
 		end
 	end
 end
@@ -1669,7 +1672,7 @@ zgfunc[sgs.ChoiceMade].shgx=function(self, room, event, player, data,isowner,nam
 	local choices= data:toString():split(":")
 	if choices[1]=="skillInvoke"  and  choices[2]=="guixin" and choices[3]=="yes" then
 		addTurnData(name,1)
-		if getTurnData(name)==2 and getTurnData(name.."damage")==1 then
+		if getTurnData(name)==2 and getTurnData(name.."_damage")==1 then
 			addZhanGong(room,name)
 		end
 	end
@@ -1680,7 +1683,7 @@ zgfunc[sgs.Damaged].shgx=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~="shencaocao" then return false end
 	local damage = data:toDamage()
 	if damage.damage==2 then
-		setTurnData(name.."damage",1)
+		setTurnData(name.."_damage",1)
 	end
 end
 
@@ -1692,10 +1695,26 @@ zgfunc[sgs.CardFinished].swzs=function(self, room, event, player, data,isowner,n
 	if not isowner then return false end
 	local use=data:toCardUse()
 	if use.card:getSkillName()=="longhun" then
-		addGameData(name..use.card:getSuitString(),1)
-		if getGameData(name..Spade)==2 and getGameData(name..Heart)==2 and getGameData(name..Club)==2
-			and getGameData(name..Diamond)==2 then
+		setGameData(name..'_'..use.card:getSuitString(), math.min(2,getGameData(name..'_'..use.card:getSuitString()) ) )
+		if getGameData(name..'_Spade')==2 and getGameData(name..'_Heart')==2 and getGameData(name..'_Club')==2
+			and getGameData(name..'_Diamond')==2 then
 			addZhanGong(room,name)
+			setGameData(name..'_Heart',-100)
+		end
+	end
+end
+
+zgfunc[sgs.CardResponsed].swzs=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~='shenzhaoyun' then return false end
+	if not isowner then return false end
+	local use=data:toResponsed()
+	local card=use.m_card
+	if card:getSkillName()=="longhun" then
+		setGameData(name..'_'..card:getSuitString(), math.min(2,getGameData(name..'_'..card:getSuitString()) ) )
+		if getGameData(name..'_Spade')==2 and getGameData(name..'_Heart')==2 and getGameData(name..'_Club')==2
+			and getGameData(name..'_Diamond')==2 then
+			addZhanGong(room,name)
+			setGameData(name..'_Heart',-100)
 		end
 	end
 end
@@ -1760,10 +1779,10 @@ zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,n
 	local use=data:toCardUse()
 	local card=use.card
 	if card:isKindOf("ShenfenCard") then
-		setGameData(name..'shenfen',math.min(4,getGameData(name..'shenfen')+1))
-		if getGameData(name..'shenfen')==4 and getGameData(name..'wuqian')==3 then
+		setGameData(name..'_shenfen',math.min(4,getGameData(name..'_shenfen')+1))
+		if getGameData(name..'_shenfen')==4 and getGameData(name..'_wuqian')==3 then
 			addZhanGong(room,name)
-			setGameData(name..'shenfen',-100)
+			setGameData(name..'_shenfen',-100)
 		end
 	end
 end
@@ -1774,10 +1793,10 @@ zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,n
 	local use=data:toCardUse()
 	local card=use.card
 	if card:isKindOf("WuqianCard") then
-		setGameData(name..'wuqian',math.min(3,getGameData(name..'wuqian')+1))
-		if getGameData(name..'shenfen')==4 and getGameData(name..'wuqian')==3 then
+		setGameData(name..'_wuqian',math.min(3,getGameData(name..'_wuqian')+1))
+		if getGameData(name..'_shenfen')==4 and getGameData(name..'_wuqian')==3 then
 			addZhanGong(room,name)
-			setGameData(name..'shenfen',-100)
+			setGameData(name..'_shenfen',-100)
 		end
 	end
 end
@@ -1836,10 +1855,31 @@ end
 function addGameData(key,val)
 	if not zggamedata[key] then zggamedata[key]=0 end
 	zggamedata[key]=zggamedata[key]+val
+
+	local trs=genTranslation()
+	local name
+	if string.find(key,'_')	then
+		local arr=key:split("_")
+		name=trs[arr[1]]..'_'..arr[2]
+	else
+		name=trs[key]
+	end
+	myroom:getOwner():speak("%s+%d=%d",name,val,zggamedata[key])
 end
 
 function setGameData(key,val)	
 	zggamedata[key]=val
+
+	local trs=genTranslation()
+	local name
+	if string.find(key,'_')	then
+		local arr=key:split("_")
+		name=trs[arr[1]]..'_'..arr[2]
+	else
+		name=trs[key]
+	end
+	myroom:getOwner():speak("%s=%d",name,zggamedata[key])
+
 end
 
 function getGameData(key,...)
@@ -1855,10 +1895,30 @@ end
 function addTurnData(key,val)
 	if not zgturndata[key] then zgturndata[key]=0 end
 	zgturndata[key]=zgturndata[key]+val
+
+	local trs=genTranslation()
+	local name
+	if string.find(key,'_')	then
+		local arr=key:split("_")
+		name=trs[arr[1]]..'_'..arr[2]
+	else
+		name=trs[key]
+	end
+	myroom:getOwner():speak("%s+%d=%d",name,val,zggamedata[key])
 end
 
 function setTurnData(key,val)
 	zgturndata[key]=val
+
+	local trs=genTranslation()
+	local name
+	if string.find(key,'_')	then
+		local arr=key:split("_")
+		name=trs[arr[1]]..'_'..arr[2]
+	else
+		name=trs[key]
+	end
+	myroom:getOwner():speak("%s=%d",name,zggamedata[key])
 end
 
 function getTurnData(key,...)
@@ -1927,7 +1987,7 @@ end
 
 zgzhangong1 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong1",
-	events = {sgs.GameStart,sgs.Damage,sgs.GameOverJudge,sgs.Death,sgs.DamageCaused,sgs.DamageComplete,
+	events = {sgs.GameStart,sgs.Damage,sgs.GameOverJudge,sgs.Death,sgs.DamageCaused,sgs.DamageComplete,sgs.CardResponsed
 			sgs.TurnStart,sgs.HpRecover,sgs.DamageInflicted,sgs.ConfirmDamage,sgs.Damaged},
 	priority = 6,
 	can_trigger = function()
@@ -1937,6 +1997,8 @@ zgzhangong1 = sgs.CreateTriggerSkill{
 	on_trigger = function(self, event, player, data)
 		local room = player:getRoom()
 		local owner= room:getOwner():objectName()==player:objectName()
+
+		myroom = room
 		
 		if event ==sgs.GameStart and owner and room:getTag("zg_init_game"):toBool()==false then
 			room:setTag("zg_init_game",sgs.QVariant(true))
