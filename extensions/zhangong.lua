@@ -1035,7 +1035,7 @@ end
 zgfunc[sgs.FinishRetrial].xzxm=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='guojia' then return false end
 	local judge=data:toJudge()
-	if judge.reason=="tiandu" and juege.who:objectName()==room:getOwner():objectName() and judge.card:isKindOf("Peach") then
+	if player:hasSkill("tiandu") and juege.who:objectName()==room:getOwner():objectName() and judge.card:isKindOf("Peach") then
 		addGameData(name,1)
 		if getGameData(name)==4 then addZhanGong(room,name) end
 	end
@@ -1987,8 +1987,9 @@ end
 
 zgzhangong1 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong1",
-	events = {sgs.GameStart,sgs.Damage,sgs.GameOverJudge,sgs.Death,sgs.DamageCaused,sgs.DamageComplete,sgs.CardResponsed
-			sgs.TurnStart,sgs.HpRecover,sgs.DamageInflicted,sgs.ConfirmDamage,sgs.Damaged},
+	events = {sgs.GameStart,sgs.Damage,sgs.GameOverJudge,sgs.Death,sgs.DamageCaused,sgs.DamageComplete,
+			sgs.CardResponsedsgs.TurnStart,sgs.HpRecover,sgs.DamageInflicted,sgs.ConfirmDamage,
+			sgs.Damaged,sgs.ChoiceMade,sgs.FinishRetrial},
 	priority = 6,
 	can_trigger = function()
 		return true
@@ -2025,9 +2026,9 @@ zgzhangong1 = sgs.CreateTriggerSkill{
 
 zgzhangong2 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong2",
-	events = {sgs.CardFinished,sgs.ChoiceMade,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,
-		sgs.CardEffected,sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.FinishRetrial,
-		sgs.CardDiscarded,sgs.CardResponsed,sgs.SlashMissed},
+	events = {sgs.CardFinished,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,sgs.CardEffected,
+		sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.CardDiscarded,sgs.CardResponsed,
+		sgs.SlashMissed},
 	priority = 6,
 	on_trigger = function(self, event, player, data)
 		local room = player:getRoom()
