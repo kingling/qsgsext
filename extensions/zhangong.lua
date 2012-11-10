@@ -1035,7 +1035,7 @@ end
 zgfunc[sgs.FinishRetrial].xzxm=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='guojia' then return false end
 	local judge=data:toJudge()
-	if player:hasSkill("tiandu") and juege.who:objectName()==room:getOwner():objectName() and judge.card:isKindOf("Peach") then
+	if player:hasSkill("tiandu") and judge.who:objectName()==room:getOwner():objectName() and judge.card:isKindOf("Peach") then
 		addGameData(name,1)
 		if getGameData(name)==4 then addZhanGong(room,name) end
 	end
