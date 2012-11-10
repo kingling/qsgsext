@@ -460,13 +460,13 @@ zgfunc[sgs.GameOverJudge].callback.tyzy=function(room,player,data,name,result)
 		if not diffgroup then
 			if gname=="liubei" or gname=="bgm_liubei" then
 				has_liubei=true
-				if owner:objectName()==ap:objectName() then issjy==true end
+				if owner:objectName()==ap:objectName() then issjy=true end
 			elseif gname=="guanyu" or gname=="shenguanyu" or gname=="sp_guanyu" or gname=="neo_guanyu" then
 				has_guanyu=true
 				if owner:objectName()==ap:objectName() then issjy==true end
-			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname=="bgm_zhangfei" then
+			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname="bgm_zhangfei" then
 				has_zhangfei=true
-				if owner:objectName()==ap:objectName() then issjy==true end
+				if owner:objectName()==ap:objectName() then issjy=true end
 			end
 		end
 	end
@@ -489,7 +489,7 @@ zgfunc[sgs.Death].wsww=function(self, room, event, player, data,isowner,name)
 	local damage = data:toDamageStar()
 	if not damage then return false end
 	if getGameData("hegemony")==1 then return false end
-	if room:getOwner():getRole=="rebel" and damage.from and damage.from:objectName()==room:getOwner():objectName() 
+	if room:getOwner():getRole()=="rebel" and damage.from and damage.from:objectName()==room:getOwner():objectName() 
 		and damage.to:getRole()=="rebel" then
 		addGameData(name,1)
 	end	
@@ -555,7 +555,7 @@ end
 --
 zgfunc[sgs.CardsMoveOneTime].ymds=function(self, room, event, player, data,isowner,name)
 	local move=data:toMoveOneTime()
-	if move.from_places:contains(sgs.Player_Equip) and move.from:objectName()==room:getOwner:objectName()
+	if move.from_places:contains(sgs.Player_PlaceEquip) and move.from:objectName()==room:getOwner():objectName()
 		and move.reason==sgs.CardMoveReason_S_REASON_CHANGE_EQUIP then
 		for _,cdid in sgs.qlist(move.card_ids) do
 			if cdid:isKindOf("Horse") then
@@ -725,7 +725,7 @@ end
 
 -- sssl :: 深思熟虑 :: 使用孙权在一个回合内发动制衡的牌不少于10张
 --
-zgfunc[sgs.CardFinished.sssl=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardFinished].sssl=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='sunquan' then return false end
 	if not isowner then return false end
 	if data:toCardUse().card:getSubcards():length()>=10 then addZhanGong(room,name) end
@@ -786,7 +786,7 @@ zgfunc[sgs.CardFinished].dkzz=function(self, room, event, player, data,isowner,n
 	if data:toCardUse().card:getSkillName()=="jiushi" and player:getPhase()==sgs.Player_Play then addTurnData(name,1) end
 	if data:toCardUse().card:isKindOf("Slash") and player:getPhase()==sgs.Player_Play and player:hasFlag("drank")
 		and getTurnData(name)==1 then
-		room->setCardFlag(data:toCardUse().card, "jiushi-slash")
+		room:setCardFlag(data:toCardUse().card, "jiushi-slash")
 	end
 end
 
@@ -1605,7 +1605,7 @@ end
 
 zgfunc[sgs.GameOverJudge].callback.jjfs=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='shenzhaoyun' then return false end
-	if result=='win' and getGameData(name,0)>==0 and room:getOwner():getHp()==1 then
+	if result=='win' and getGameData(name)==0 and room:getOwner():getHp()==1 then
 		addZhanGong(room,name)
 	end
 end
@@ -1988,7 +1988,7 @@ end
 zgzhangong1 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong1",
 	events = {sgs.GameStart,sgs.Damage,sgs.GameOverJudge,sgs.Death,sgs.DamageCaused,sgs.DamageComplete,
-			sgs.CardResponsedsgs.TurnStart,sgs.HpRecover,sgs.DamageInflicted,sgs.ConfirmDamage,
+			sgs.CardResponsed,sgs.TurnStart,sgs.HpRecover,sgs.DamageInflicted,sgs.ConfirmDamage,
 			sgs.Damaged,sgs.ChoiceMade,sgs.FinishRetrial},
 	priority = 6,
 	can_trigger = function()
