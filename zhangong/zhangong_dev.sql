@@ -236,7 +236,7 @@ INSERT INTO zhangong VALUES('cbyx', '长坂英雄', 10, '使用赵云在一局�
 INSERT INTO zhangong VALUES('cqb', '拆迁办', 15, '在一个回合内使用卡牌过河拆桥/顺手牵羊累计4次', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('cqcz', '此情常在', 10, '在一局游戏中，布练师发动安恤4次并在阵亡情况下获胜', 0, 'wu', '1999-12-31 00:00:00', 'bulianshi', 0, 0);
 INSERT INTO zhangong VALUES('cqdd', '拆迁大队', 15, '在一局游戏中，累计使用卡牌过河拆桥10次以上', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
-INSERT INTO zhangong VALUES('ctbc', '拆桃不偿', 10, '使用甘宁在一局游戏中发动“奇袭”拆掉至少5张桃', 0, 'wu', '1999-12-31 00:00:00', 'ganning', 0, 0);
+INSERT INTO zhangong VALUES('ctbc', '拆桃不偿', 10, '使用甘宁在一局游戏中发动“奇袭”从对方手牌中拆掉至少5张桃', 0, 'wu', '1999-12-31 00:00:00', 'ganning', 0, 0);
 INSERT INTO zhangong VALUES('dcxj', '雕虫小技', 10, '使用卧龙在一局游戏中发动“看破”至少15次', 0, 'shu', '1999-12-31 00:00:00', 'wolong', 0, 0);
 INSERT INTO zhangong VALUES('dkjj', '荡寇将军', 10, '使用程普在一局游戏中，发动技能“疠火”杀死至少三名反贼最终获得胜利', 0, 'wu', '1999-12-31 00:00:00', 'chengpu', 0, 0);
 INSERT INTO zhangong VALUES('dkzz', '杜康之子', 10, '使用曹植在一局游戏中发动酒诗后成功用杀造成伤害累计5次', 0, 'wei', '1999-12-31 00:00:00', 'caozhi', 0, 0);
@@ -244,7 +244,6 @@ INSERT INTO zhangong VALUES('dqzw', '大权在握', 10, '使用钟会在一局�
 INSERT INTO zhangong VALUES('dgxl', '东宫西略', 15, '在一局游戏中，身份为男性主公，而忠臣为两名女性武将并在女性忠臣全部存活的情况下获胜', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('dym', '大姨妈', 10, '使用甄姬连续5回合洛神的第一次结果都是红色，不包括改判', 0, 'wei', '1999-12-31 00:00:00', 'zhenji', 0, 0);
 INSERT INTO zhangong VALUES('dyzh', '当阳之吼', 10, '在一局游戏中，使用☆SP张飞累计两次在大喝拼点成功的回合中用红“杀”手刃一名角色', 0, 'shu', '1999-12-31 00:00:00', 'bgm_zhangfei', 0, 0);
-INSERT INTO zhangong VALUES('fpz', '方片周', 10, '使用周瑜在一局游戏中累计4次反间都被对方猜中并拿走方片手牌', 0, 'wu', '1999-12-31 00:00:00', 'zhouyu', 0, 0);
 INSERT INTO zhangong VALUES('fynd', '愤勇难当', 10, '使用☆SP夏侯惇在一局游戏中，至少发动四次愤勇', 0, 'wei', '1999-12-31 00:00:00', 'bgm_xiahoudun', 0, 0);
 INSERT INTO zhangong VALUES('gjcc', '诡计重重', 15, '在一局游戏中，累计使用锦囊牌至少20次', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('glnc', '刚烈难存', 10, '使用夏侯惇在一局游戏中连续4次刚烈判定均为红桃', 0, 'wei', '1999-12-31 00:00:00', 'xiahoudun', 0, 0);
@@ -258,21 +257,17 @@ INSERT INTO zhangong VALUES('htdl', '黄天当立', 15, '使用张角在一局�
 INSERT INTO zhangong VALUES('hztx', '虎子同心', 10, '使用关兴张苞在父魂成功后，一个回合杀死至少三名反贼', 0, 'shu', '1999-12-31 00:00:00', 'guanxingzhangbao', 0, 0);
 INSERT INTO zhangong VALUES('jcyd', '将驰有度', 10, '使用曹彰发动将驰的两种效果各连续两回合', 0, 'wei', '1999-12-31 00:00:00', 'caozhang', 0, 0);
 INSERT INTO zhangong VALUES('jdfy', '绝对防御', 15, '在一局游戏中，使用八挂累计出闪20次', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
-INSERT INTO zhangong VALUES('jdqb', '经达权变', 10, '使用荀攸在一局游戏中，至少发动三次智愚弃掉对手手牌', 0, 'wei', '1999-12-31 00:00:00', 'xunyou', 0, 0);
 INSERT INTO zhangong VALUES('jfhz', '解烦护主', 10, '使用韩当在一局游戏游戏中发动“解烦”救过队友孙权至少两次', 0, 'wu', '1999-12-31 00:00:00', 'handang', 0, 0);
 INSERT INTO zhangong VALUES('jg', '酒鬼', 15, '出牌阶段开始时，手牌中至少有3张“酒”', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('jhlt', '举火燎天', 15, '在一局游戏中，造成火焰伤害累计10点以上，不含武将技能', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('jjfs', '绝境逢生', 10, '使用神赵云在一局游戏中,当体力为一的时候，一直保持一体力直到游戏获胜', 0, 'god', '1999-12-31 00:00:00', 'shenzhaoyun', 0, 0);
 INSERT INTO zhangong VALUES('jjh', '交际花', 10, '使用孙尚香和全部其他角色皆使用过结姻', 0, 'wu', '1999-12-31 00:00:00', 'sunshangxiang', 0, 0);
 INSERT INTO zhangong VALUES('jjnh', '禁军难护', 10, '使用韩当在一局游戏中有角色濒死时发动“解烦”并出杀后均被闪避至少5次', 0, 'wu', '1999-12-31 00:00:00', 'handang', 0, 0);
-INSERT INTO zhangong VALUES('jjqj', '进谏劝君 ', 10, '使用陈宫在一局游戏中，对主公发动“明策”，令主公摸至少5张牌', 0, 'qun', '1999-12-31 00:00:00', 'chengong', 0, 0);
 INSERT INTO zhangong VALUES('jjyb', '戒酒以备', 10, '使用高顺在一局游戏中使用技能“禁酒”将至少3张酒当成杀使用或打出', 0, 'qun', '1999-12-31 00:00:00', 'gaoshun', 0, 0);
 INSERT INTO zhangong VALUES('jsbc', '坚守不出', 10, '使用曹仁在一局游戏中连续8回合发动据守', 0, 'wei', '1999-12-31 00:00:00', 'caoren', 0, 0);
 INSERT INTO zhangong VALUES('jwrs', '军威如山', 10, '使用☆SP甘宁在一局游戏中发动军威累计得到过至少6张“闪”', 0, 'wu', '1999-12-31 00:00:00', 'bgm_ganning', 0, 0);
 INSERT INTO zhangong VALUES('jyh', '解语花', 10, '使用步练师在一局游戏中发动安恤摸八张牌以上', 0, 'wu', '1999-12-31 00:00:00', 'bulianshi', 0, 0);
 INSERT INTO zhangong VALUES('lpkd', '连破克敌', 10, '使用神司马懿在一局游戏中发动3次连破并最后获胜', 0, 'god', '1999-12-31 00:00:00', 'shensimayi', 0, 0);
-INSERT INTO zhangong VALUES('lrhj', '来人，护驾', 10, '使用曹操在一局游戏中发动护驾累计被响应不少于10次', 0, 'wei', '1999-12-31 00:00:00', 'caocao', 0, 0);
-INSERT INTO zhangong VALUES('pjzs', '破军之势', 10, '使用徐盛在一局游戏中发动“破军”让一名角色连续翻面3次', 0, 'wu', '1999-12-31 00:00:00', 'xusheng', 0, 0);
 INSERT INTO zhangong VALUES('qbcs', '七步成诗', 10, '使用曹植在一局游戏中发动酒诗7次', 0, 'wei', '1999-12-31 00:00:00', 'caozhi', 0, 0);
 INSERT INTO zhangong VALUES('qjbc', '奇计百出', 10, '使用荀攸在一局游戏中，发动“奇策”使用至少六种锦囊', 0, 'wei', '1999-12-31 00:00:00', 'xunyou', 0, 0);
 INSERT INTO zhangong VALUES('qldy', '枪林弹雨', 10, '使用袁绍在一回合内发动8次乱击', 0, 'qun', '1999-12-31 00:00:00', 'yuanshao', 0, 0);
@@ -295,7 +290,6 @@ INSERT INTO zhangong VALUES('tmnw', '天命难违', 10, '使用司马懿被自�
 INSERT INTO zhangong VALUES('tmzf', '天命之罚', 10, '在一局游戏中，使用司马懿更改闪电判定牌至少劈中其他角色两次', 0, 'wei', '1999-12-31 00:00:00', 'simayi', 0, 0);
 INSERT INTO zhangong VALUES('tyzm', '桃园之梦', 10, '使用神关羽在一局游戏中阵亡后发动武魂判定结果为桃园结义', 0, 'god', '1999-12-31 00:00:00', 'shenguanyu', 0, 0);
 INSERT INTO zhangong VALUES('tyzy', '桃园之义', 15, '在一局游戏中，场上同时存在刘备、关羽、张飞三人且为队友，而你是其中一个并最后获胜', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
-INSERT INTO zhangong VALUES('wabm', '唯爱不灭', 15, '使用任意武将在一局游戏中被步练师发动过追忆并最后获胜。', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('wmsz', '无谋竖子', 10, '使用神吕布在一局游戏中发动无谋至少8次', 0, 'god', '1999-12-31 00:00:00', 'shenlvbu', 0, 0);
 INSERT INTO zhangong VALUES('wsww', '为时未晚', 15, '身为反贼，在一局游戏中杀死了除自己以外所有反贼并获得游戏的胜利', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('wxwd', '惟贤惟德', 10, '使用刘备在一个回合内发动仁德给的牌不少于10张', 0, 'shu', '1999-12-31 00:00:00', 'liubei', 0, 0);
