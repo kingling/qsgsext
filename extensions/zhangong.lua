@@ -177,12 +177,12 @@ end
 zgfunc[sgs.GameOverJudge].callback.bj=function(room,player,data,name,result)
 	if result~='win' then return false end
 	if getGameData("hegemony")==1 then return false end
-	local loyalistnum=0
+	local loyalist_num=0
 	for _,ap in sgs.qlist(room:getPlayers()) do
 		if ap:getRole()=="loyalist" then
 			if ap:isAlive() then return false
 			else
-				loyalist_num=loylist_num+1
+				loyalist_num=loyalist_num+1
 			end
 		end
 	end
@@ -199,9 +199,9 @@ zgfunc[sgs.CardDiscarded].bjz=function(self, room, event, player, data,isowner,n
 	for _,cdid in sgs.qlist(card:getSubcards()) do
 		if sgs.Sanguosha:getCard(cdid):isKindOf("Peach") then
 			addGameData(name,1)
+			if getGameData(name)==10 then addZhanGong(room,name) end
 		end
 	end
-	if getGameData(name)==10 then addZhanGong(room,name) end
 end
 
 
@@ -527,7 +527,19 @@ end
 --
 zgfunc[sgs.HpRecover].xhjs=function(self, room, event, player, data,isowner,name)
 	local recover = data:toRecover()
-	if recover.recover>=player:getHp() and recover.who:objectName()==room:getOwner():objectName() then
+	if player:getHp()<=0 and recover.recover+player:getHp()>=1 then
+		local role1=room:getOwner():getRole()
+		local role2=player:getRole()
+		if role1=="lord" then role1="loyalist" end
+		if role2=="lord" then role2="loyalist" end
+		if room:getMode() == "06_3v3" then
+			if role1=="renegade" then role1="rebel" end
+			if role2=="renegade" then role2="rebel" end
+		end
+		local diffgroup =false
+		if role1~=role2 then diffgroup=true end
+		if role1=="renegade" or role2=="renegade" then diffgroup=true end
+		if diffgroup then return false end
 		addGameData(name,1)
 		if getGameData(name)==4 then addZhanGong(room,name) end
 	end
