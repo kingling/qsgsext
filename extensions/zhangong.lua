@@ -1132,7 +1132,8 @@ end
 zgfunc[sgs.SlashEffected].wzxj=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='yujin' then return false end
 	local effect= data:toSlashEffect()
-	if effect.to:hasSkill("yizhong") and effect.to:objectName()==room:getOwner():objectName() and effect.slash:isBlack() then
+	if effect.to:hasSkill("yizhong") and effect.to:objectName()==room:getOwner():objectName() and effect.slash:isBlack() 
+		and effect.to:getArmor()==nil then
 		addGameData(name,1)
 		if getGameData(name)==3 then
 			addZhanGong(room,name)
