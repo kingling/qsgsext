@@ -463,8 +463,8 @@ zgfunc[sgs.GameOverJudge].callback.tyzy=function(room,player,data,name,result)
 				if owner:objectName()==ap:objectName() then issjy=true end
 			elseif gname=="guanyu" or gname=="shenguanyu" or gname=="sp_guanyu" or gname=="neo_guanyu" then
 				has_guanyu=true
-				if owner:objectName()==ap:objectName() then issjy==true end
-			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname="bgm_zhangfei" then
+				if owner:objectName()==ap:objectName() then issjy=true end
+			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname=="bgm_zhangfei" then
 				has_zhangfei=true
 				if owner:objectName()==ap:objectName() then issjy=true end
 			end
