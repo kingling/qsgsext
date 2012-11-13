@@ -970,6 +970,7 @@ end
 zgfunc[sgs.FinishRetrial].glnc=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='xiahoudun' then return false end
 	if not isowner then return false end
+	local judge = data:toJudge()
 	if judge.reason=="ganglie" and judge.who:objectName()==room:getOwner():objectName() then
 		if judge:isGood() then
 			setGameData(name,0)
