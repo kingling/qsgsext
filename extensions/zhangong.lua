@@ -691,6 +691,18 @@ zgfunc[sgs.CardFinished].jfhz=function(self, room, event, player, data,isowner,n
 	if not isowner then return false end
 	local use=data:toCardUse()
 	if use.to:getGeneralName()=="sunquan" and use.card:getSkillName()=="jiefan" then
+		local role1=room:getOwner():getRole()
+		local role2=ap:getRole()
+		if role1=="lord" then role1="loyalist" end
+		if role2=="lord" then role2="loyalist" end
+		if room:getMode() == "06_3v3" then
+			if role1=="renegade" then role1="rebel" end
+			if role2=="renegade" then role2="rebel" end
+		end
+		local diffgroup =false
+		if role1~=role2 then diffgroup=true end
+		if role1=="renegade" or role2=="renegade" then diffgroup=true end
+		if diffgroup then return false end
 		addGameData(name,1)
 		if getGameData(name)==2 then addZhanGong(room, name) end
 	end
@@ -791,10 +803,16 @@ zgfunc[sgs.CardFinished].ssex=function(self, room, event, player, data,isowner,n
 	for i=0, y-1, 1 do
 		if player:getHandcards():at(x-y+i):isKindOf("Peach") then
 			addGameData(name.."_peach",1)
-			if getGameData(name.."_peach")==4 and getGameData(name.."_exnihilo")==4 then addZhanGong(room,name) end
+			if getGameData(name.."_peach")>=4 and getGameData(name.."_exnihilo")>=4 then 
+				addZhanGong(room,name) 
+				setGameData(name.."_peach", -100)
+			end
 		elseif player:getHandcards():at(x-y+i):isKindOf("ExNihilo") then
 			addGameData(name.."_exnihilo",1)
-			if getGameData(name.."_peach")==4 and getGameData(name.."_exnihilo")==4 then addZhanGong(room,name) end
+			if getGameData(name.."_peach")>=4 and getGameData(name.."_exnihilo")>=4 then 
+				addZhanGong(room,name) 
+				setGameData(name.."_exnihilo", -100)
+			end
 		end
 	end
 end
