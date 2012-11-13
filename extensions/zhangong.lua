@@ -349,7 +349,7 @@ zgfunc[sgs.EventPhaseStart].jg=function(self, room, event, player, data,isowner,
 	if not isowner then return false end
 	if player:getPhase()==sgs.Player_Play and player:getHandcardNum()>2 then
 		local analeptic_num=0
-		for _,cd in sgs.qlist(player:getHandcard()) do
+		for _,cd in sgs.qlist(player:getHandcards()) do
 			if cd:isKindOf("Analeptic") then
 				analeptic_num=analeptic_num+1
 			end
@@ -463,8 +463,8 @@ zgfunc[sgs.GameOverJudge].callback.tyzy=function(room,player,data,name,result)
 				if owner:objectName()==ap:objectName() then issjy=true end
 			elseif gname=="guanyu" or gname=="shenguanyu" or gname=="sp_guanyu" or gname=="neo_guanyu" then
 				has_guanyu=true
-				if owner:objectName()==ap:objectName() then issjy==true end
-			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname="bgm_zhangfei" then
+				if owner:objectName()==ap:objectName() then issjy=true end
+			elseif gname=="zhangfei" or gname=="neo_zhangfei" or gname=="bgm_zhangfei" then
 				has_zhangfei=true
 				if owner:objectName()==ap:objectName() then issjy=true end
 			end
@@ -516,7 +516,7 @@ end
 -- xcdz :: 星驰电走 :: 在一局游戏中，累计出闪20次
 --
 zgfunc[sgs.CardResponsed].xcdz=function(self, room, event, player, data,isowner,name)
-	if data:toResponsed().m_card:isKindOf("Jink") then
+	if data:toResponsed().m_card:isKindOf("Jink") and isowner then
 		addGameData(name,1)
 		if getGameData(name)==20 then addZhanGong(room,name) end
 	end
@@ -1998,7 +1998,8 @@ function addGameData(key,val)
 	else
 		name=trs[key]
 	end
-	myroom:getOwner():speak("%s+%d=%d",name,val,zggamedata[key])
+	if name==nil then name=key end
+	myroom:getOwner():speak(string.format("%s+%d=%d",name,val,zggamedata[key]))
 end
 
 function setGameData(key,val)	
@@ -2012,7 +2013,8 @@ function setGameData(key,val)
 	else
 		name=trs[key]
 	end
-	myroom:getOwner():speak("%s=%d",name,zggamedata[key])
+	if name==nil then name=key end
+	myroom:getOwner():speak(string.format("%s=%s",name,zggamedata[key]))
 
 end
 
@@ -2038,7 +2040,8 @@ function addTurnData(key,val)
 	else
 		name=trs[key]
 	end
-	myroom:getOwner():speak("%s+%d=%d",name,val,zggamedata[key])
+	if name==nil then name=key end
+	myroom:getOwner():speak(string.format("%s+%d=%d",name,val,zgturndata[key]))
 end
 
 function setTurnData(key,val)
@@ -2052,7 +2055,8 @@ function setTurnData(key,val)
 	else
 		name=trs[key]
 	end
-	myroom:getOwner():speak("%s=%d",name,zggamedata[key])
+	if name==nil then name=key end
+	myroom:getOwner():speak(string.format("%s=%s",name,zgturndata[key]))
 end
 
 function getTurnData(key,...)
