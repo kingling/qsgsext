@@ -177,7 +177,7 @@ end
 -- bj :: 暴君 :: 身为主公在1局游戏中，在反贼和内奸全部存活的情况下杀死全部忠臣，并最后胜利
 -- 
 zgfunc[sgs.GameOverJudge].callback.bj=function(room,player,data,name,result)
-	if result~='win' then return false end
+	if result~='win' or not room:getOwner():isLord() then return false end
 	if getGameData("hegemony")==1 then return false end
 	local loyalist_num=0
 	for _,ap in sgs.qlist(room:getPlayers()) do
