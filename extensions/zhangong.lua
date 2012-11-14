@@ -42,6 +42,7 @@ zgfunc[sgs.GameStart]={}
 zgfunc[sgs.GameOverJudge]={}
 zgfunc[sgs.GameOverJudge]["callback"]={}
 zgfunc[sgs.HpRecover]={}
+zgfunc[sgs.HpChanged]={}
 
 zgfunc[sgs.SlashEffect]={}
 zgfunc[sgs.SlashEffected]={}
@@ -653,9 +654,6 @@ zgfunc[sgs.GameOverJudge].callback.dkjj=function(room,player,data,name,result)
 end
 
 
--- fpz :: 方片周 :: 使用周瑜在一局游戏中累计4次反间都被对方猜中并拿走方片手牌
---
--- 这个实现不了
 
 
 -- gzwb :: 固政为本 :: 使用张昭张纮在一局游戏中利用技能“固政”获得累计至少40张牌
@@ -783,14 +781,6 @@ zgfunc[sgs.CardsMoveOneTime].jyh=function(self, room, event, player, data,isowne
 	end
 end
 
-
-
-
-
-
--- pjzs :: 破军之势 :: 使用徐盛在一局游戏中发动“破军”让一名角色翻面3次
---
--- 不好实现
 
 
 
@@ -1007,10 +997,6 @@ zgfunc[sgs.ChoiceMade].jcyd=function(self, room, event, player, data,isowner,nam
 end
 
 
--- jdqb :: 经达权变 :: 使用荀攸在一局游戏中，至少发动三次智愚弃掉对手手牌
---
-
-
 
 -- jsbc :: 坚守不出 :: 使用曹仁在一局游戏中连续8回合发动据守
 --
@@ -1032,16 +1018,6 @@ zgfunc[sgs.ChoiceMade].jsbc=function(self, room, event, player, data,isowner,nam
 end
 
 
-----------------------------------------------------------------------------
-----------------------------------------------------------------------------
------------分割线
-----------------------------------------------------------------------------
-----------------------------------------------------------------------------
-
-
--- lrhj :: 来人，护驾 :: 使用曹操在一局游戏中发动护驾累计被响应不少于10次
---
--- 实现不了
 
 
 -- qbcs :: 七步成诗 :: 使用曹植在一局游戏中发动酒诗7次
@@ -1630,9 +1606,6 @@ zgfunc[sgs.FinishRetrial].hjqy=function(self, room, event, player, data,isowner,
 end
 
 
--- jjqj :: 进谏劝君  :: 使用陈宫在一局游戏中，对主公发动“明策”，令主公摸至少5张牌
---
--- 实现不了，AI 不会触发 choiceMade
 
 
 -- jjyb :: 戒酒以备 :: 使用高顺在一局游戏中使用技能“禁酒”将至少3张酒当成杀使用或打出
@@ -2114,9 +2087,21 @@ zgfunc[sgs.Damage].wzsh=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
 	local damage=data:toDamage()
 	if damage.damage>=5 and not damage.chain then
-		addGameData(name,damage.damage)
+		addZhanGong(room,name)
 	end
 end
+
+-- dsdnx :: 屌丝的逆袭 :: 身为虎牢关联军的先锋，第一回合就爆了虎牢布的菊花
+--
+zgfunc[sgs.HpChanged].dsdnx=function(self, room, event, player, data,isowner,name)
+	if room:getMode()~="04_1v3" or not player:isLord() then return false end
+	if room:getCurrent():objectName()~=room:getOwner():objectName() or getGameData("turncount")>1 then return false end
+	if room:getOwner():getSeat()==1 and player:getHp()<= 4 and player:getMark("secondMode") == 0 then
+		addZhanGong(room,name)
+	end
+end
+
+
 
 
 
@@ -2308,8 +2293,8 @@ end
 zgzhangong1 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong1",
 	events = {sgs.GameStart,sgs.Damage,sgs.GameOverJudge,sgs.Death,sgs.DamageCaused,sgs.DamageComplete,
-			sgs.CardResponsed,sgs.TurnStart,sgs.HpRecover,sgs.DamageInflicted,sgs.ConfirmDamage,
-			sgs.Damaged,sgs.ChoiceMade,sgs.FinishRetrial},
+			sgs.CardResponsed,sgs.TurnStart,sgs.HpRecover,sgs.DamageInflicted,sgs.ConfirmDamage,sgs.HpChanged,
+			sgs.Damaged,sgs.FinishRetrial},
 	priority = 6,
 	can_trigger = function()
 		return true
@@ -2346,7 +2331,7 @@ zgzhangong1 = sgs.CreateTriggerSkill{
 
 zgzhangong2 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong2",
-	events = {sgs.CardFinished,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,sgs.CardEffected,sgs.Predamage,
+	events = {sgs.CardFinished,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,sgs.CardEffected,sgs.Predamage,sgs.ChoiceMade,
 		sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.CardDiscarded,sgs.CardResponsed,
 		sgs.SlashMissed},
 	priority = 6,

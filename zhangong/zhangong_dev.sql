@@ -322,4 +322,5 @@ INSERT INTO zhangong VALUES('lbss', '乐不思蜀', 10, '在对你的“乐不�
 INSERT INTO zhangong VALUES('ydqb', '原地起爆', 10, '回合开始阶段你1血0牌的情况下，一回合内杀死3名角色', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('hyhs', '红颜祸水', 10, '使用SP貂蝉在一局游戏中，两次对主公和忠臣发动技能“离间”并导致2名忠臣阵亡', 0, 'qun', '1999-12-31 00:00:00', 'sp_diaochan', 0, 0);
 INSERT INTO zhangong VALUES('wzsh', '威震四海', 15, '一次对其他角色造成至少5点伤害', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('dsdnx', '屌丝的逆袭', 15, '身为虎牢关联军的先锋，第一回合就爆了虎牢布的菊花', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 COMMIT;
