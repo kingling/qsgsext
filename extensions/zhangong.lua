@@ -1248,7 +1248,7 @@ zgfunc[sgs.GameOverJudge].callback.ybyt=function(room,player,data,name,result)
 	if damage.from:objectName()==room:getOwner():objectName() and damage.from:getMark("danji")>0 and damage.to:getRole()=="rebel" then
 		addGameData(name,1)
 	end	
-	if getGameData(name)==2 then addZhanGong(room,name) end
+	if getGameData(name)>=2 then addZhanGong(room,name) end
 end
 
 
