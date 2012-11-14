@@ -2091,7 +2091,7 @@ end
 zgfunc[sgs.HpChanged].dsdnx=function(self, room, event, player, data,isowner,name)
 	if room:getMode()~="04_1v3" or not player:isLord() then return false end
 	if room:getCurrent():objectName()~=room:getOwner():objectName() or getGameData("turncount")>1 then return false end
-	if room:getOwner():getSeat()==1 and player:getHp()<= 4 and player:getMark("secondMode") == 0 then
+	if room:getOwner():getSeat()==2 and player:getHp()<= 4 and player:getMark("secondMode") == 0 then
 		addZhanGong(room,name)
 	end
 end
@@ -2099,7 +2099,7 @@ end
 -- kdzz :: 坑爹自重 :: 使用刘禅，孙权&孙策，曹丕&曹植坑了自己的老爹
 --
 zgfunc[sgs.Death].kdzz=function(self, room, event, player, data,isowner,name)
-	local damage=data:toDamage()
+	local damage=data:toDamageStar()
 	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
 		local kengdie=false
 		local from=damage.from:getGeneralName()
@@ -2114,7 +2114,7 @@ zgfunc[sgs.Death].kdzz=function(self, room, event, player, data,isowner,name)
 end
 
 zgfunc[sgs.GameOverJudge].callback.kdzz=function(room,player,data,name,result)
-	local damage=data:toDamage()
+	local damage=data:toDamageStar()
 	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
 		local kengdie=false
 		local from=damage.from:getGeneralName()
