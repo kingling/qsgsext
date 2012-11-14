@@ -478,11 +478,6 @@ zgfunc[sgs.GameOverJudge].callback.tyzy=function(room,player,data,name,result)
 end
 
 
--- wabm :: 唯爱不灭 :: 使用任意武将在一局游戏中被步练师发动过追忆并最后获胜。
---
--- 凡是由 AI 做出的 askForChoice 都不会触发 ChoiceMade
---
-
 
 -- wsww :: 为时未晚 :: 身为反贼，在一局游戏中杀死了除自己以外所有反贼并获得游戏的胜利
 --
@@ -2098,6 +2093,38 @@ zgfunc[sgs.HpChanged].dsdnx=function(self, room, event, player, data,isowner,nam
 	if room:getCurrent():objectName()~=room:getOwner():objectName() or getGameData("turncount")>1 then return false end
 	if room:getOwner():getSeat()==1 and player:getHp()<= 4 and player:getMark("secondMode") == 0 then
 		addZhanGong(room,name)
+	end
+end
+
+-- kdzz :: 坑爹自重 :: 使用刘禅，孙权&孙策，曹丕&曹植坑了自己的老爹
+--
+zgfunc[sgs.Death].kdzz=function(self, room, event, player, data,isowner,name)
+	local damage=data:toDamage()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
+		local kengdie=false
+		local from=damage.from:getGeneralName()
+		local to=damage.to:getGeneralName()
+		if string.match(to,'liubei') and from=='liushan' then kengdie=true end
+		if string.match(to,'caocao') and (from=='caopi' or from=='caozhi') then kengdie=true end
+		if string.match(to,'sunjian') and (from=='sunquan' or from=='sunce') then kengdie=true end
+		if kengdie then
+			addZhanGong(room,name)
+		end
+	end
+end
+
+zgfunc[sgs.GameOverJudge].callback.kdzz=function(room,player,data,name,result)
+	local damage=data:toDamage()
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() then
+		local kengdie=false
+		local from=damage.from:getGeneralName()
+		local to=damage.to:getGeneralName()
+		if string.match(to,'liubei') and from=='liushan' then kengdie=true end
+		if string.match(to,'caocao') and (from=='caopi' or from=='caozhi') then kengdie=true end
+		if string.match(to,'sunjian') and (from=='sunquan' or from=='sunce') then kengdie=true end
+		if kengdie then
+			addZhanGong(room,name)
+		end
 	end
 end
 
