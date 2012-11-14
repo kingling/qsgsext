@@ -49,6 +49,7 @@ zgfunc[sgs.SlashMissed]={}
 
 zgfunc[sgs.TurnStart]={}
 zgfunc[sgs.Pindian]={}
+zgfunc[sgs.Predamage]={}
 
 sgs.Todo=9999
 zgfunc[sgs.Todo]={}
@@ -984,8 +985,25 @@ end
 
 -- jcyd :: 将驰有度 :: 使用曹彰发动将驰的两种效果各连续两回合
 --
-zgfunc[sgs.Todo].jcyd=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='caozhang' then return false end
+zgfunc[sgs.ChoiceMade].jcyd=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="caozhang" then return false end
+	if not isowner then return false end
+	local choices= data:toString():split(":")
+	for index, option in ipairs({"jiang","chi"}) do
+		if choices[1]=="skillChoice"  and  choices[2]=="jiangchi" and choices[3]==option then
+			setGameData(name..'_'..option,string.format("%s%d,",getGameData(name..'_'..option,''),getGameData('turncount')))
+			local arr=string.sub(getGameData(name..'_'..option),1,-2):split(",")
+			if #arr>=2 then
+				if arr[#arr]-arr[#arr-1]==1 then
+					addGameData(name..'_'..index,1)
+					if getGameData(name..'_1')>=1 and getGameData(name..'_2')>=1 then
+						addZhangong(room,name)
+						setGameData(name..'_'..index,-100)
+					end
+				end
+			end
+		end
+	end
 end
 
 
@@ -1967,6 +1985,139 @@ zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,n
 end
 
 
+-- sxnj :: 神仙难救 :: 使用贾诩在你的回合中有至少3个角色阵亡
+--
+zgfunc[sgs.Death].sxnj=function(self, room, event, player, data,isowner,name)
+	if room:getOwner():getGeneralName()~='jiaxu' then return false end
+	if room:getCurrent():objectName()~=room:getOwner():objectName() then return false end
+	addTurnData(name,1)
+	if getTurnData(name)==3 then
+		addZhanGong(room,name)
+	end
+end
+
+zgfunc[sgs.GameOverJudge].callback.sxnj=function(room,player,data,name,result)
+	if room:getOwner():getGeneralName()~='jiaxu' then return false end
+	if room:getCurrent():objectName()~=room:getOwner():objectName() then return false end
+	addTurnData(name,1)
+	if getTurnData(name)==3 then
+		addZhanGong(room,name)
+	end
+end
+
+
+-- jzyf :: 见者有份 :: 使用杨修在一局游戏中发动技能“啖酪”至少6次
+--
+zgfunc[sgs.ChoiceMade].jzyf=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="yangxiu" then return false end
+	if not isowner then return false end
+	local choices= data:toString():split(":")
+	if choices[1]=="skillInvoke"  and  choices[2]=="danlao" and choices[3]=="yes" then
+		addGameData(name,1)
+		if getGameData(name)==6 then
+			addZhanGong(room,name)
+		end
+	end
+end
+
+-- xhrb :: 心如寒冰 :: 使用张春华在一局游戏中至少触发“绝情”10次以上
+--
+zgfunc[sgs.Predamage].xhrb=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="zhangchunhua" then return false end
+	if not isowner then return false end
+	addGameData(name,1)
+	if getGameData(name)==10 then
+		addZhanGong(room,name)
+	end
+end
+
+-- lbss :: 乐不思蜀 :: 在对你的“乐不思蜀”生效后的回合弃牌阶段弃置超过8张手牌
+--
+zgfunc[sgs.FinishRetrial].lbss=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local judge=data:toJudge()
+	if judge.reason=="indulgence" and judge.who:objectName()==room:getOwner():objectName() and judge:isBad() then
+		setTurnData(name,1)
+	end
+end
+
+zgfunc[sgs.CardDiscarded].lbss=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getPhase()~=sgs.Player_Discard then return false end
+	if getTurnData(name)~=1 then return false end
+	local card = data:toCard()
+	local count = 0
+	for _,cdid in sgs.qlist(card:getSubcards()) do
+		count=count +1
+		if count==8 then addZhanGong(room,name) end
+	end
+end
+
+
+-- ydqb :: 原地起爆 :: 回合开始阶段你1血0牌的情况下，一回合内杀死3名角色
+--
+zgfunc[sgs.EventPhaseStart].ydqb=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	if player:getPhase()==sgs.Player_Start and player:isKongcheng() and player:getHp()==1 then
+		setTurnData(name..'_start',1)
+	end
+end
+
+zgfunc[sgs.Death].ydqb=function(self, room, event, player, data,isowner,name)
+	if room:getCurrent():objectName()~=room:getOwner():objectName() then return false end
+	addTurnData(name,1)
+	if getTurnData(name)==3 and getTurnData(name..'_start')==1 then
+		addZhanGong(room,name)
+	end
+end
+
+zgfunc[sgs.GameOverJudge].callback.ydqb=function(room,player,data,name,result)
+	if room:getCurrent():objectName()~=room:getOwner():objectName() then return false end
+	addTurnData(name,1)
+	if getTurnData(name)==3 and getTurnData(name..'_start')==1 then
+		addZhanGong(room,name)
+	end
+end
+
+-- hyhs :: 红颜祸水 :: 使用SP貂蝉在一局游戏中，两次对主公和忠臣发动技能“离间”并导致2名忠臣阵亡
+--
+zgfunc[sgs.Death].hyhs=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="sp_diaochan" then return false end
+	local damage=data:toDamageStar()
+	if not damage then return false end
+	if  room:getCurrent():objectName()==room:getOwner():objectName() and damage.card and damage.card:getSkillName()=="lijian"
+			and damage.from:isLord() and damage.to:getRole()=='loyalist' then
+		addGameData(name,1)
+		if getGameData(name)==2 then
+			addZhanGong(room,name)
+		end
+	end
+end
+
+zgfunc[sgs.GameOverJudge].callback.hyhs=function(room,player,data,name,result)
+	if  room:getOwner():getGeneralName()~="sp_diaochan" then return false end
+	local damage=data:toDamageStar()
+	if not damage then return false end
+	if  room:getCurrent():objectName()==room:getOwner():objectName() and damage.card and damage.card:getSkillName()=="lijian"
+			and damage.from:isLord() and damage.to:getRole()=='loyalist' then
+		addGameData(name,1)
+		if getGameData(name)==2 then
+			addZhanGong(room,name)
+		end
+	end
+end
+
+
+-- wzsh :: 威震四海 :: 一次对其他角色造成至少5点伤害
+--
+zgfunc[sgs.Damage].wzsh=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local damage=data:toDamage()
+	if damage.damage>=5 and not damage.chain then
+		addGameData(name,damage.damage)
+	end
+end
+
 
 
 function broadcastMsg(room,info,...)
@@ -2195,7 +2346,7 @@ zgzhangong1 = sgs.CreateTriggerSkill{
 
 zgzhangong2 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong2",
-	events = {sgs.CardFinished,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,sgs.CardEffected,
+	events = {sgs.CardFinished,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,sgs.CardEffected,sgs.Predamage,
 		sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.CardDiscarded,sgs.CardResponsed,
 		sgs.SlashMissed},
 	priority = 6,

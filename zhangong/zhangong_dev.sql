@@ -315,4 +315,11 @@ INSERT INTO zhangong VALUES('zmjzg', '走马见诸葛', 10, '使用徐庶在一�
 INSERT INTO zhangong VALUES('zsbsh', '宗室遍四海', 10, '使用刘表在一局游戏中利用技能“宗室”提高4手牌上限', 0, 'qun', '1999-12-31 00:00:00', 'liubiao', 0, 0);
 INSERT INTO zhangong VALUES('zszn', '战神之怒', 10, '使用神吕布在一局游戏中发动至少4次神愤、3次无前', 0, 'god', '1999-12-31 00:00:00', 'shenlvbu', 0, 0);
 INSERT INTO zhangong VALUES('zzhs', '智之化身', 10, '使用黄月英在一局游戏发动20次集智至少20次', 0, 'shu', '1999-12-31 00:00:00', 'huangyueying', 0, 0);
+INSERT INTO zhangong VALUES('sxnj', '神仙难救', 10, '使用贾诩在你的回合中有至少3个角色阵亡', 0, 'qun', '1999-12-31 00:00:00', 'jiaxu', 0, 0);
+INSERT INTO zhangong VALUES('jzyf', '见者有份', 10, '使用杨修在一局游戏中发动技能“啖酪”至少6次', 0, 'wei', '1999-12-31 00:00:00', 'yangxiu', 0, 0);
+INSERT INTO zhangong VALUES('xhrb', '心如寒冰', 10, '使用张春华在一局游戏中至少触发“绝情”10次以上', 0, 'wei', '1999-12-31 00:00:00', 'zhangchunhua', 0, 0);
+INSERT INTO zhangong VALUES('lbss', '乐不思蜀', 10, '在对你的“乐不思蜀”生效后的回合弃牌阶段弃置超过8张手牌', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('ydqb', '原地起爆', 10, '回合开始阶段你1血0牌的情况下，一回合内杀死3名角色', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('hyhs', '红颜祸水', 10, '使用SP貂蝉在一局游戏中，两次对主公和忠臣发动技能“离间”并导致2名忠臣阵亡', 0, 'qun', '1999-12-31 00:00:00', 'sp_diaochan', 0, 0);
+INSERT INTO zhangong VALUES('wzsh', '威震四海', 15, '一次对其他角色造成至少5点伤害', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 COMMIT;
