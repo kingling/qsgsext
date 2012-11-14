@@ -1846,11 +1846,11 @@ zgfunc[sgs.CardFinished].swzs=function(self, room, event, player, data,isowner,n
 	if not isowner then return false end
 	local use=data:toCardUse()
 	if use.card:getSkillName()=="longhun" then
-		setGameData(name..'_'..use.card:getSuitString(), math.min(2,getGameData(name..'_'..use.card:getSuitString()) ) )
-		if getGameData(name..'_Spade')==2 and getGameData(name..'_Heart')==2 and getGameData(name..'_Club')==2
-			and getGameData(name..'_Diamond')==2 then
+		setGameData(name..'_'..use.card:getSuitString(), math.min(2,getGameData(name..'_'..use.card:getSuitString())+1 ) )
+		if getGameData(name..'_spade')==2 and getGameData(name..'_heart')==2 and getGameData(name..'_club')==2
+			and getGameData(name..'_diamond')==2 then
 			addZhanGong(room,name)
-			setGameData(name..'_Heart',-100)
+			setGameData(name..'_heart',-100)
 		end
 	end
 end
@@ -1861,11 +1861,11 @@ zgfunc[sgs.CardResponsed].swzs=function(self, room, event, player, data,isowner,
 	local use=data:toResponsed()
 	local card=use.m_card
 	if card:getSkillName()=="longhun" then
-		setGameData(name..'_'..card:getSuitString(), math.min(2,getGameData(name..'_'..card:getSuitString()) ) )
-		if getGameData(name..'_Spade')==2 and getGameData(name..'_Heart')==2 and getGameData(name..'_Club')==2
-			and getGameData(name..'_Diamond')==2 then
+		setGameData(name..'_'..card:getSuitString(), math.min(2,getGameData(name..'_'..card:getSuitString())+1 ) )
+		if getGameData(name..'_spade')==2 and getGameData(name..'_heart')==2 and getGameData(name..'_club')==2
+			and getGameData(name..'_diamond')==2 then
 			addZhanGong(room,name)
-			setGameData(name..'_Heart',-100)
+			setGameData(name..'_heart',-100)
 		end
 	end
 end
