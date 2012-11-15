@@ -333,7 +333,7 @@ zgfunc[sgs.CardEffected].htdl=function(self, room, event, player, data,isowner,n
 	if not isowner then return false end
 	if player:getGeneralName()~="zhangjiao" then return false end
 	local effect=data:toCardEffect()
-	if effect.card:isKindOf("HuangtianCard") and effect.card:getSubcards():first():isKindOf("Jink") then
+	if effect.card:isKindOf("HuangtianCard") and sgs.Sanguosha:getCard(effect.card:getSubcards():first()):isKindOf("Jink") then
 		addGameData(name,1)
 		if getGameData(name)==8 then addZhanGong(room,name) end
 	end
@@ -1600,7 +1600,7 @@ zgfunc[sgs.CardEffected].hjqy=function(self, room, event, player, data,isowner,n
 	if not isowner then return false end
 	if player:getGeneralName()~="zhangjiao" then return false end
 	local effect=data:toCardEffect()
-	if effect.card:isKindOf("HuangtianCard") and effect.card:getSubcards():first():isKindOf("Jink") then
+	if effect.card:isKindOf("HuangtianCard") and sgs.Sanguosha:getCard(effect.card:getSubcards():first()):isKindOf("Jink") then
 		setGameData(name..'_jink',math.min(3,getGameData(name..'_jink')+1))
 		if getGameData(name..'_jink')==3 and getGameData(name..'_leiji')==3 then
 			addZhanGong(room,name)
