@@ -881,21 +881,33 @@ end
 --
 zgfunc[sgs.CardFinished].dkzz=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='caozhi' then return false end
-	if not isowner or player:getPhase()~=sgs.Player_Play then return false end
+	if not isowner then return false end
 	local use=data:toCardUse()
-	local card=use.card
-	if card:isKindOf('Analeptic') and card:getSkillName()=='jiushi' then
-		setTurnData(name,1)
+	if use.card:getSkillName()=="jiushi" and player:getPhase()==sgs.Player_Play then 
+		addTurnData(name.."_analeptic",1) 
+	end
+	if use.card:isKindOf("Slash") and player:getPhase()==sgs.Player_Play and getTurnData(name.."_slash")>0 then
+		setTurnData(name.."_slash",0)
 	end
 end
 
--- dkzz :: 杜康之子 :: 使用曹植在一局游戏中发动酒诗后成功用杀造成伤害累计5次
---
+
+zgfunc[sgs.SlashEffect].dkzz=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~='caozhi' then return false end
+	if not isowner then return false end
+	local effect=data:toSlashEffect()
+	if player:getPhase()==sgs.Player_Play and effect.drank and getTurnData(name.."_analeptic")==1 then
+		addTurnData(name.."_slash",1)
+	end
+end
+
+
 zgfunc[sgs.Damage].dkzz=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='caozhi' then return false end
 	if not isowner then return false end
 	local damage=data:toDamage()
-	if damage and damage.from and damage.card and damage.card:isKindOf("Slash") and getTurnData(name)==1 then
+	if damage.card and damage.card:isKindOf("Slash") and getTurnData(name.."_slash")>0 then
+		setTurnData(name.."_slash",0)
 		addGameData(name,1)
 		if getGameData(name)==5 then addZhanGong(room,name) end
 	end
