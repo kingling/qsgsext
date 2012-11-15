@@ -1490,7 +1490,7 @@ zgfunc[sgs.Death].ysadj=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='masu' then return false end
 	if not isowner then return false end
 	local damage=data:toDamageStar()
-	if not (damage or damage.from) then return false end
+	if not (damage and damage.from) then return false end
 	if not player:hasSkill('huilei') then return false end
 	local num=damage.from:getHandcardNum()
 	for i=0,3,1 do
@@ -1505,7 +1505,7 @@ zgfunc[sgs.GameOverJudge].callback.ysadj=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='masu' then return false end
 	if not isowner then return false end
 	local damage=data:toDamageStar()
-	if not (damage or damage.from) then return false end
+	if not (damage and damage.from) then return false end
 	if not player:hasSkill('huilei') then return false end
 	local num=damage.from:getHandcardNum()
 	for i=0,3,1 do
