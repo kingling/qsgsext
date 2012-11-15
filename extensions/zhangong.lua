@@ -1631,8 +1631,8 @@ zgfunc[sgs.CardFinished].jjyb=function(self, room, event, player, data,isowner,n
 	if player:getGeneralName()~="gaoshun" then return false end
 	local use=data:toCardUse()
 	local card=use.card
-	if card:isKindOf("Slash") and card:getSubcards():first():isKindOf("Analeptic") then
-		addGameData(name,1)
+	if card:isKindOf("Slash") and sgs.Sanguosha:getCard(card:getSubcards():first()):isKindOf("Analeptic") 
+		and card:getSkillName()=="jinjiu" then
 		if getGameData(name)==3 then addZhanGong(room,name) end
 	end
 end
