@@ -1660,7 +1660,7 @@ zgfunc[sgs.Death].sbfs=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='yanliangwenchou' then return false end
 	if not isowner then return false end
 	local damage=data:toDamageStar()
-	if not (damage or damage.from) then return false end
+	if not (damage and damage.from) then return false end
 	local dname=damage.from:getGeneralName()
 	if (dname=="guanyu" or dname=="sp_guanyu" or dname=="shenguanyu" or dname=="neo_guanyu") 
 		and damage.card:isKindOf("Duel") then
@@ -1672,7 +1672,7 @@ end
 zgfunc[sgs.GameOverJudge].callback.sbfs=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='yanliangwenchou' then return false end
 	local damage=data:toDamageStar()
-	if not (damage or damage.from) then return false end
+	if not (damage and damage.from) then return false end
 	local dname=damage.from:getGeneralName()
 	if (dname=="guanyu" or dname=="sp_guanyu" or dname=="shenguanyu" or dname=="neo_guanyu") 
 		and damage.card:isKindOf("Duel") then
@@ -1690,7 +1690,7 @@ zgfunc[sgs.Death].syqd=function(self, room, event, player, data,isowner,name)
 	end
 end
 
-zgfunc[sgs.GameOverJudge].callback.yzrx=function(room,player,data,name,result)
+zgfunc[sgs.GameOverJudge].callback.syqd=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~="huaxiong" then return false end
 	if isowner and player:getMaxHp()<1 and room:findPlayer('madai',true) then
 		addZhanGong(room,name)
