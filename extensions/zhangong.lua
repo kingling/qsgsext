@@ -1186,7 +1186,7 @@ end
 zgfunc[sgs.Death].xhdc=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='bgm_xiahoudun' then return false end
 	local damage=data:toDamageStar()
-	if damage and damage.from and damage.card and damage.card:getSkillName()=="xuehan" 
+	if damage and damage.from and damage.card and damage.card:getSkillName()=="xuehen" 
 		and damage.from:objectName()==room:getOwner():objectName() then
 		addZhanGong(room,name)
 	end
@@ -1198,7 +1198,7 @@ end
 zgfunc[sgs.GameOverJudge].callback.xhdc=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='bgm_xiahoudun' then return false end
 	local damage=data:toDamageStar()
-	if damage and damage.from and damage.card and damage.card:getSkillName()=="xuehan" 
+	if damage and damage.from and damage.card and damage.card:getSkillName()=="xuehen" 
 		and damage.from:objectName()==room:getOwner():objectName() then
 		addZhanGong(room,name)
 	end
