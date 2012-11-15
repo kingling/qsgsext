@@ -1388,7 +1388,8 @@ end
 zgfunc[sgs.GameOverJudge].callback.hztx=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='guanxingzhangbao' then return false end
 	local damage=data:toDamageStar()
-	if damage.from:objectName()==room:getOwner():objectName() and damage.from:hasFlag("fuhun") and damage.to:getRole()=="rebel" then
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() 
+		and damage.from:hasFlag("fuhun") and damage.to:getRole()=="rebel" then
 		addTurnData(name,1)
 		if getTurnData(name)==3 then addZhanGong(room,name) end
 	end
