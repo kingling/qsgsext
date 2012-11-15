@@ -528,21 +528,34 @@ end
 
 -- xhjs :: 悬壶济世 :: 在一局游戏中，使用桃或技能累计将我方队友脱离濒死状态4次以上
 --
+function isSameGroup(a,b)
+	local role1=a:getRole()
+	local role2=b:getRole()
+	if role1=="lord" then role1="loyalist" end
+	if role2=="lord" then role2="loyalist" end
+	if room:getMode() == "06_3v3" then
+		if role1=="renegade" then role1="rebel" end
+		if role2=="renegade" then role2="rebel" end
+	end
+	return role1==role2 and role1~="renegade"
+end
+
 zgfunc[sgs.HpRecover].xhjs=function(self, room, event, player, data,isowner,name)
 	local recover = data:toRecover()
-	if player:getHp()<=0 and recover.recover+player:getHp()>=1 then
-		local role1=room:getOwner():getRole()
-		local role2=player:getRole()
-		if role1=="lord" then role1="loyalist" end
-		if role2=="lord" then role2="loyalist" end
-		if room:getMode() == "06_3v3" then
-			if role1=="renegade" then role1="rebel" end
-			if role2=="renegade" then role2="rebel" end
-		end
-		local diffgroup =false
-		if role1~=role2 then diffgroup=true end
-		if role1=="renegade" or role2=="renegade" then diffgroup=true end
-		if diffgroup then return false end
+	if player:getHp()<=0 and recover.recover+player:getHp()>=1 and recover.who
+			and recover.who:objectName()==room:getOwner():objectName() and isSameGroup(player,recover.who) then
+		addGameData(name,1)
+		if getGameData(name)==4 then addZhanGong(room,name) end
+	end
+end
+
+zgfunc[sgs.CardFinished].xhjs=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	local tos=sgs.QList2Table(use.to)
+	if card:isKindOf("Peach") and #tos==1 and tos[1]:objectName()~=player:objectName()
+			and tos[1]:getHp()>=1 and isSameGroup(player,tos[1]) then
 		addGameData(name,1)
 		if getGameData(name)==4 then addZhanGong(room,name) end
 	end
