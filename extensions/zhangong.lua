@@ -225,10 +225,16 @@ zgfunc[sgs.CardFinished].bqk=function(self, room, event, player, data,isowner,na
 	local use=data:toCardUse()
 	if use.card:isKindOf("Weapon") then
 		addGameData(name.."_weapon", 1)
-		if getGameData(name.."_weapon")==10 and getGameData(name.."_armor")==10 then addZhanGong(room,name) end
+		if getGameData(name.."_weapon")>=10 and getGameData(name.."_armor")>=10 then
+			addZhanGong(room,name)
+			setGameData(name.."_weapon", -100)
+		end
 	elseif use.card:isKindOf("Armor") then
 		addGameData(name.."_armor", 1)
-		if getGameData(name.."_weapon")==10 and getGameData(name.."_armor")==10 then addZhanGong(room,name) end
+		if getGameData(name.."_weapon")>=10 and getGameData(name.."_armor")>=10 then
+			addZhanGong(room,name)
+			setGameData(name.."_armor", -100)
+		end
 	end
 end
 
@@ -366,7 +372,7 @@ end
 zgfunc[sgs.Damage].jhlt=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
 	local damage=data:toDamage()
-	if damage.card~=nil and damage.nature==sgs.DamageStruct_Fire then
+	if damage and damage.card and damage.nature==sgs.DamageStruct_Fire then
 		addGameData(name,damage.damage)
 		if getGameData(name)>=10 then 
 			addZhanGong(room,name) 
