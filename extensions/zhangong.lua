@@ -891,21 +891,21 @@ end
 --
 zgfunc[sgs.CardFinished].dkzz=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='caozhi' then return false end
-	if not isowner then return false end
-	if data:toCardUse().card:getSkillName()=="jiushi" and player:getPhase()==sgs.Player_Play then addTurnData(name,1) end
-	if data:toCardUse().card:isKindOf("Slash") and player:getPhase()==sgs.Player_Play and player:hasFlag("drank")
-		and getTurnData(name)==1 then
-		room:setCardFlag(data:toCardUse().card, "jiushi-slash")
+	if not isowner or player:getPhase()~=sgs.Player_Play then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isKindOf('Analeptic') and card:getSkillName()=='jiushi' then
+		setTurnData(name,1)
 	end
 end
-
 
 -- dkzz :: 杜康之子 :: 使用曹植在一局游戏中发动酒诗后成功用杀造成伤害累计5次
 --
 zgfunc[sgs.Damage].dkzz=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='caozhi' then return false end
 	if not isowner then return false end
-	if damage.card and damage.card:isKindOf("Slash") and damage.card:hasFlag("jiushi-slash") then
+	local damage=data:toDamage()
+	if damage and damage.from and damage.card and damage.card:isKindOf("Slash") and getTurnData(name)==1 then
 		addGameData(name,1)
 		if getGameData(name)==5 then addZhanGong(room,name) end
 	end
@@ -1657,7 +1657,7 @@ end
 zgfunc[sgs.Death].sbfs=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='yanliangwenchou' then return false end
 	if not isowner then return false end
-	local damage=data:toDamage()
+	local damage=data:toDamageStar()
 	if not (damage or damage.from) then return false end
 	local dname=damage.from:getGeneralName()
 	if (dname=="guanyu" or dname=="sp_guanyu" or dname=="shenguanyu" or dname=="neo_guanyu") 
@@ -1669,7 +1669,7 @@ end
 
 zgfunc[sgs.GameOverJudge].callback.sbfs=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='yanliangwenchou' then return false end
-	local damage=data:toDamage()
+	local damage=data:toDamageStar()
 	if not (damage or damage.from) then return false end
 	local dname=damage.from:getGeneralName()
 	if (dname=="guanyu" or dname=="sp_guanyu" or dname=="shenguanyu" or dname=="neo_guanyu") 
