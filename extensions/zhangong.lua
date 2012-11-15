@@ -718,7 +718,7 @@ zgfunc[sgs.CardFinished].jjh=function(self, room, event, player, data,isowner,na
 	if  room:getOwner():getGeneralName()~='sunshangxiang' then return false end
 	if not isowner then return false end
 	local use=data:toCardUse()
-	if use.card:isKindOf("JieyinCard") and use.to:getMark("jieyinzg_count")==0 then
+	if use.card:isKindOf("JieyinCard") and use.to:first():getMark("jieyinzg_count")==0 then
 		room:setPlayerMark(use.to, "jieyinzg_count", 1)
 		local jieyin_count=0
 		for _,ap in sgs.qlist(room:getPlayers()) do
@@ -833,7 +833,7 @@ zgfunc[sgs.ChoiceMade].syjh=function(self, room, event, player, data,isowner,nam
 	end
 end
 
-zgfunc[sgs.GameOverJudge].callback.yzrx=function(room,player,data,name,result)
+zgfunc[sgs.GameOverJudge].callback.syjh=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='bgm_daqiao' then return false end
 	if result=='win' and getGameData(name)>=5 then
 		addZhanGong(room,name)
@@ -1079,8 +1079,8 @@ end
 zgfunc[sgs.CardFinished].qqtx=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhonghui' then return false end
 	if not isowner then return false end
-	if data:toCardUse().card:isKindOf("PaiyiCard") and use.to:objectName()==player:objectName() then
-		addGameData(name,3)
+	if data:toCardUse().card:isKindOf("PaiyiCard") and use.to:first():objectName()==player:objectName() then
+		addGameData(name,2)
 		if getGameData(name)>=10 then
 			addZhanGong(room,name)
 			setGameData(name,-100)
@@ -1545,13 +1545,13 @@ zgfunc[sgs.GameOverJudge].callback.zlzn=function(room,player,data,name,result)
 end
 
 
--- zmjzg :: 走马见诸葛 :: 使用徐庶在一局游戏中至少有3次举荐诸葛且用于举荐的牌里必须有马
+-- zmjzg :: 走马见诸葛 :: 使用旧徐庶在一局游戏中至少有3次举荐诸葛且用于举荐的牌里必须有马
 --
 zgfunc[sgs.CardFinished].zmjzg=function(self, room, event, player, data,isowner,name)
-	if  room:getOwner():getGeneralName()~='xushu' then return false end
+	if  room:getOwner():getGeneralName()~='nosxushu' then return false end
 	if not isowner then return false end
 	local use=data:toCardUse()
-	if use.from:objectName()==room:getOwner():objectName() and use.card:isKindOf("JujianCard")
+	if use.from:objectName()==room:getOwner():objectName() and use.card:isKindOf("NosJujianCard")
 		and (use.to:getGeneralName()=="zhugeliang" or use.to:getGeneralName()=="wolong" or use.to:getGeneralName()=="shenzhugeliang") then
 		local has_horse=false
 		for _,cd in sgs.qlist(use.card:getSubcards()) do
