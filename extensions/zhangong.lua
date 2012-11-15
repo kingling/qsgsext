@@ -1001,7 +1001,7 @@ zgfunc[sgs.ChoiceMade].jcyd=function(self, room, event, player, data,isowner,nam
 				if arr[#arr]-arr[#arr-1]==1 then
 					addGameData(name..'_'..index,1)
 					if getGameData(name..'_1')>=1 and getGameData(name..'_2')>=1 then
-						addZhangong(room,name)
+						addZhanGong(room,name)
 						setGameData(name..'_'..index,-100)
 					end
 				end
