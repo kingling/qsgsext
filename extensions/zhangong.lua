@@ -533,7 +533,7 @@ function isSameGroup(a,b)
 	local role2=b:getRole()
 	if role1=="lord" then role1="loyalist" end
 	if role2=="lord" then role2="loyalist" end
-	if room:getMode() == "06_3v3" then
+	if a:getRoom():getMode() == "06_3v3" then
 		if role1=="renegade" then role1="rebel" end
 		if role2=="renegade" then role2="rebel" end
 	end
@@ -549,17 +549,7 @@ zgfunc[sgs.HpRecover].xhjs=function(self, room, event, player, data,isowner,name
 	end
 end
 
-zgfunc[sgs.CardFinished].xhjs=function(self, room, event, player, data,isowner,name)
-	if not isowner then return false end
-	local use=data:toCardUse()
-	local card=use.card
-	local tos=sgs.QList2Table(use.to)
-	if card:isKindOf("Peach") and #tos==1 and tos[1]:objectName()~=player:objectName()
-			and tos[1]:getHp()>=1 and isSameGroup(player,tos[1]) then
-		addGameData(name,1)
-		if getGameData(name)==4 then addZhanGong(room,name) end
-	end
-end
+
 
 
 -- xnhx :: 邪念惑心 :: 作为忠臣在一局游戏中，在场上没有反贼时手刃主公
