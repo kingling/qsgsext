@@ -1027,9 +1027,9 @@ zgfunc[sgs.ChoiceMade].jsbc=function(self, room, event, player, data,isowner,nam
 			for i=#arr,#arr-6,-1 do
 				if arr[i]-arr[i-1]~=1 then return false end
 			end
+			addZhanGong(room,name)
+			setGameData(name,'')
 		end
-		addZhanGong(room,name)
-		setGameData(name,'')
 	end
 end
 
