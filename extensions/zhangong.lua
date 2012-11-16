@@ -342,13 +342,18 @@ end
 
 -- jdfy :: 绝对防御 :: 在一局游戏中，使用八挂累计出闪20次
 --
-zgfunc[sgs.CardResponsed].jdfy=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.FinishRetrial].jdfy=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
-	if data:toResponsed().m_card:isKindOf("Jink") and data:toResponsed().m_card:getSkillName()=="EightDiagram" then
+	local judge=data:toJudge()
+	if judge.reason=="EightDiagram" and judge.who:objectName()==room:getOwner():objectName() and judge:isGood() then
 		addGameData(name,1)
-		if getGameData(name)==20 then addZhanGong(room,name) end
+		if getGameData(name)==20 then
+			addZhanGong(room,name)
+		end
 	end
 end
+
+
 
 
 -- jg :: 酒鬼 :: 出牌阶段开始时，手牌中至少有3张“酒”
