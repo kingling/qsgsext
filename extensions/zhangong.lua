@@ -1596,7 +1596,7 @@ zgfunc[sgs.HpRecover].bnzw=function(self, room, event, player, data,isowner,name
 end
 
 
--- hjqy :: 黄巾起义 :: 使用张角在一局游戏中收到过群雄角色给的闪至少3张，并至少三次雷击成功
+-- hjqy :: 黄巾起义 :: 使用张角在一局游戏中收到过群雄角色给的闪至少3张，并至少3次雷击成功
 --
 zgfunc[sgs.CardEffected].hjqy=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
@@ -1821,8 +1821,9 @@ zgfunc[sgs.Death].sfgj=function(self, room, event, player, data,isowner,name)
 	local damage=data:toDamageStar()
 	local victim=player:getGeneralName()
 	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() and
-			(victim=='liubei' or victim=='_sunquan' or victim=='_caocao') then
+			(victim=='liubei' or victim=='sunquan' or victim=='caocao') then
 		addGlobalData(name..'_'..victim,1)
+		player:speak("三分归晋_"..victim.." +1")
 		if getGlobalData(name..'_liubei')>=10 and getGlobalData(name..'_sunquan')>=10 and getGlobalData(name..'_caocao')>=10 then
 			addZhanGong(room,name)
 			setGlobalData(name..'_liubei',-100)
@@ -1837,8 +1838,9 @@ zgfunc[sgs.GameOverJudge].callback.sfgj=function(room,player,data,name,result)
 	local damage=data:toDamageStar()
 	local victim=player:getGeneralName()
 	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() and
-			(victim=='_liubei' or victim=='_sunquan' or victim=='_caocao') then
+			(victim=='liubei' or victim=='sunquan' or victim=='caocao') then
 		addGlobalData(name..'_'..victim,1)
+		player:speak("三分归晋_"..victim.." +1")
 		if getGlobalData(name..'_liubei')>=10 and getGlobalData(name..'_sunquan')>=10 and getGlobalData(name..'_caocao')>=10 then
 			addZhanGong(room,name)
 			setGlobalData(name..'_liubei',-100)
@@ -2323,10 +2325,12 @@ function init_gamestart(self, room, event, player, data, isowner)
 			room:detachSkillFromPlayer(p, "#zgzhangong2")
 		end
 	end
+	--[[
 	if count>1 then
 		setGameData("enable",0)
 		return false
 	end
+	]]
 
 	for key,val in pairs(zggamedata) do
 		zggamedata[key]=0
