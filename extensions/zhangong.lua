@@ -1709,7 +1709,7 @@ zgfunc[sgs.GameOverJudge].callback.syqd=function(room,player,data,name,result)
 end
 
 
--- yzrx :: 医者仁心 :: 使用华佗在一局游戏中对4个身份的人都发动过青囊，游戏结束亮明身份后获得
+-- yzrx :: 医者仁心 :: 使用华佗在一局游戏中对4个身份的人都发动过青囊并最后获胜
 --
 zgfunc[sgs.CardFinished].yzrx=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
@@ -1717,7 +1717,7 @@ zgfunc[sgs.CardFinished].yzrx=function(self, room, event, player, data,isowner,n
 	local use=data:toCardUse()
 	local card=use.card
 	local tos=sgs.QList2Table(use.to)
-	if card:getSkillName()~="qingnang" and card:isKindOf("Peach") and #tos>0 then
+	if card:getSkillName()=="qingnang" and #tos>0 then
 		local role=tos[1]:getRole()
 		if not string.find(getGameData(name,''),role) then
 			setGameData(name,getGameData(name)..role..",")
@@ -1726,7 +1726,7 @@ zgfunc[sgs.CardFinished].yzrx=function(self, room, event, player, data,isowner,n
 end
 
 zgfunc[sgs.GameOverJudge].callback.yzrx=function(room,player,data,name,result)
-	if  room:getOwner():getGeneralName()~='shensimayi' then return false end
+	if  room:getOwner():getGeneralName()~='huatuo' then return false end
 	local arr=string.sub(getGameData(name,','),1,-2):split(",")
 	if result=='win' and #arr==4 then
 		addZhanGong(room,name)

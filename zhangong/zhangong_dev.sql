@@ -309,7 +309,7 @@ INSERT INTO zhangong VALUES('ymds', '驭马大师', 15, '在一局游戏中，�
 INSERT INTO zhangong VALUES('ynnd', '有难你当', 10, '使用小乔在一局游戏中发动“天香”导致一名其他角色死亡', 0, 'wu', '1999-12-31 00:00:00', 'xiaoqiao', 0, 0);
 INSERT INTO zhangong VALUES('yrbf', '隐忍不发', 10, '使用神司马懿在一局游戏中发动忍戒至少10次并获胜', 0, 'god', '1999-12-31 00:00:00', 'shensimayi', 0, 0);
 INSERT INTO zhangong VALUES('ysadj', '以死安大局', 10, '使用马谡在一局游戏中发动“挥泪”使一名角色弃置8张牌', 0, 'shu', '1999-12-31 00:00:00', 'masu', 0, 0);
-INSERT INTO zhangong VALUES('yzrx', '医者仁心', 10, '使用华佗在一局游戏中对4个身份的人都发动过青囊，游戏结束亮明身份后获得', 0, 'qun', '1999-12-31 00:00:00', 'huatuo', 0, 0);
+INSERT INTO zhangong VALUES('yzrx', '医者仁心', 10, '使用华佗在一局游戏中对4个身份的人都发动过青囊并最后获胜', 0, 'qun', '1999-12-31 00:00:00', 'huatuo', 0, 0);
 INSERT INTO zhangong VALUES('zlzn', '昭烈之怒', 10, '在一局游戏中，使用☆SP刘备发动昭烈杀死至少2人', 0, 'shu', '1999-12-31 00:00:00', 'bgm_liubei', 0, 0);
 INSERT INTO zhangong VALUES('zmjzg', '走马见诸葛', 10, '使用徐庶在一局游戏中至少有3次举荐诸葛且用于举荐的牌里必须有马', 0, 'shu', '1999-12-31 00:00:00', 'xushu', 0, 0);
 INSERT INTO zhangong VALUES('zsbsh', '宗室遍四海', 10, '使用刘表在一局游戏中利用技能“宗室”提高4手牌上限', 0, 'qun', '1999-12-31 00:00:00', 'liubiao', 0, 0);
