@@ -1499,14 +1499,16 @@ zgfunc[sgs.Death].ysadj=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='masu' then return false end
 	if not isowner then return false end
 	local damage=data:toDamageStar()
-	if not (damage and damage.from) then return false end
-	if not player:hasSkill('huilei') then return false end
-	local num=damage.from:getHandcardNum()
-	for i=0,3,1 do
-		if damage.from:getEquip(i) then num = num + 1 end
-	end
-	if num>=8 then
-		addZhanGong(room,name)
+	if damage and damage.from and damage.to:hasSkill('huilei') then
+		local num=damage.from:getHandcardNum()
+		player:speak(num)
+		for i=0,3,1 do
+			if damage.from:getEquip(i) then num = num + 1 end
+		end
+		player:speak(num)
+		if num>=8 then
+			addZhanGong(room,name)
+		end
 	end
 end
 
@@ -1514,14 +1516,14 @@ zgfunc[sgs.GameOverJudge].callback.ysadj=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='masu' then return false end
 	if not isowner then return false end
 	local damage=data:toDamageStar()
-	if not (damage and damage.from) then return false end
-	if not player:hasSkill('huilei') then return false end
-	local num=damage.from:getHandcardNum()
-	for i=0,3,1 do
-		if damage.from:getEquip(i) then num = num + 1 end
-	end
-	if num>=8 then
-		addZhanGong(room,name)
+	if damage and damage.from and damage.to:hasSkill('huilei') then
+		local num=damage.from:getHandcardNum()
+		for i=0,3,1 do
+			if damage.from:getEquip(i) then num = num + 1 end
+		end
+		if num>=8 then
+			addZhanGong(room,name)
+		end
 	end
 end
 
