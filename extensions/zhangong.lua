@@ -1222,7 +1222,8 @@ zgfunc[sgs.GameOverJudge].callback.ybyt=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='sp_guanyu' then return false end
 	if result~='win' then return false end
 	local damage=data:toDamageStar()
-	if damage.from:objectName()==room:getOwner():objectName() and damage.from:getMark("danji")>0 and damage.to:getRole()=="rebel" then
+	if damage and damage.from and damage.from:objectName()==room:getOwner():objectName() 
+		and damage.from:getMark("danji")>0 and damage.to:getRole()=="rebel" then
 		addGameData(name,1)
 	end	
 	if getGameData(name)>=2 then addZhanGong(room,name) end
