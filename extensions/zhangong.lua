@@ -1626,16 +1626,17 @@ end
 
 
 
--- jjyb :: 戒酒以备 :: 使用高顺在一局游戏中使用技能“禁酒”将至少3张酒当成杀使用或打出
+-- jjyb :: 戒酒以备 :: 使用高顺在一局游戏中使用技能“禁酒”将至少6张酒当成杀使用或打出
 --
 zgfunc[sgs.CardFinished].jjyb=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
 	if player:getGeneralName()~="gaoshun" then return false end
 	local use=data:toCardUse()
 	local card=use.card
-	if card:isKindOf("Slash") and sgs.Sanguosha:getCard(card:getSubcards():first()):isKindOf("Analeptic") 
-		and card:getSkillName()=="jinjiu" then
-		if getGameData(name)==3 then addZhanGong(room,name) end
+	--sgs.Sanguosha:getCard(card:getSubcards():first()):isKindOf("Analeptic")
+	if card:isKindOf("Slash") and card:getSkillName()=="jinjiu" then
+		addGameData(name,1)
+		if getGameData(name)==6 then addZhanGong(room,name) end
 	end
 end
 
