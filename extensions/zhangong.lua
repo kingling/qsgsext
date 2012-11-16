@@ -1685,16 +1685,25 @@ end
 
 -- syqd :: 恃勇轻敌 :: 使用华雄在一局游戏中，在没有马岱在场的情况下由于体力上限减至0而死亡
 --
+
+--因为 room:findPlayer 没有考虑副将，因此写一个 findPlayerByGeneralName
+function findPlayerByGeneralName(room,name)
+	for _, p in sgs.qlist(room:getAllPlayers()) do
+		if p:getGeneralName()==name or p:getGeneral2Name()==name then return true end
+	end
+	return false
+end
+
 zgfunc[sgs.Death].syqd=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~="huaxiong" then return false end
-	if isowner and player:getMaxHp()<1 and room:findPlayer('madai',true) then
+	if isowner and player:getMaxHp()<1 and not findPlayerByGeneralName(room,'madai') then
 		addZhanGong(room,name)
 	end
 end
 
 zgfunc[sgs.GameOverJudge].callback.syqd=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~="huaxiong" then return false end
-	if isowner and player:getMaxHp()<1 and room:findPlayer('madai',true) then
+	if isowner and player:getMaxHp()<1 and not findPlayerByGeneralName(room,'madai') then
 		addZhanGong(room,name)
 	end
 end
