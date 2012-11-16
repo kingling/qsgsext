@@ -1913,13 +1913,6 @@ zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,n
 			setGameData(name..'_shenfen',-100)
 		end
 	end
-end
-
-zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,name)
-	if room:getOwner():getGeneralName()~="shenlvbu" then return false end
-	if not isowner then return false end
-	local use=data:toCardUse()
-	local card=use.card
 	if card:isKindOf("WuqianCard") then
 		setGameData(name..'_wuqian',math.min(3,getGameData(name..'_wuqian')+1))
 		if getGameData(name..'_shenfen')==4 and getGameData(name..'_wuqian')==3 then
@@ -1928,6 +1921,8 @@ zgfunc[sgs.CardFinished].zszn=function(self, room, event, player, data,isowner,n
 		end
 	end
 end
+
+
 
 
 -- sxnj :: 神仙难救 :: 使用贾诩在你的回合中有至少3个角色阵亡
