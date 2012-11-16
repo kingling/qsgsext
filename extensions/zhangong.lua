@@ -1135,21 +1135,29 @@ end
 
 -- tmzf :: 天命之罚 :: 在一局游戏中，使用司马懿更改闪电判定牌至少劈中其他角色两次
 --
+zgfunc[sgs.CardsMoveOneTime].tmzf=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~='simayi' then return false end
+	local move = data:toMoveOneTime()
+	if move.from:objectName()==room:getOwner():objectName() and move.reason.m_reason==sgs.CardMoveReason_S_REASON_RETRIAL
+		and move.reason.m_skillName=="guicai" then
+		setTurnData(name.."_change", move.card_ids:first())
+	end
+end
+
+
 zgfunc[sgs.FinishRetrial].tmzf=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='simayi' then return false end
 	local judge=data:toJudge()
 	if judge.reason=="lightning" and room:getTag("retrial"):toBool()==true
 			and judge.who:objectName()~=room:getOwner():objectName() and judge:isBad() then
-		local card= judge.card
-		local simayi=room:getCardOwner(card:getId())
-		player:speak(simayi:getGeneralName())
-		if simayi and simayi:objectName()==room:getOwner():objectName() then
+		if judge.card:getEffectiveId()==getTurnData(name.."_change") then
 			addGameData(name,1)
 			if getGameData(name)==2 then
 				addZhanGong(room,name)
 			end
 		end
 	end
+	setTurnData(name.."_change", 0)
 end
 
 
