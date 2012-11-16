@@ -22,6 +22,7 @@ zgfunc[sgs.CardDiscarded]={}
 zgfunc[sgs.CardResponsed]={}
 zgfunc[sgs.ChoiceMade]={}
 zgfunc[sgs.CardResponsed]={}
+zgfunc[sgs.CardDrawing]={}
 
 
 zgfunc[sgs.ConfirmDamage]={}
@@ -1060,15 +1061,11 @@ end
 
 -- qqtx :: 权倾天下 :: 使用钟会在一局游戏中发动“排异”累计摸牌至少10张
 --
-zgfunc[sgs.CardFinished].qqtx=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhonghui' then return false end
-	if not isowner then return false end
-	if data:toCardUse().card:isKindOf("PaiyiCard") and use.to:first():objectName()==player:objectName() then
-		addGameData(name,2)
-		if getGameData(name)>=10 then
-			addZhanGong(room,name)
-			setGameData(name,-100)
-		end
+	local x=data:toInt()
+	if isowner and sgs.Sanguosha:getCard(x):hasFlag("paiyi") then
+		addGameData(name, 1)
+		if getGameData(name)==10 then addZhanGong(room, name) end
 	end
 end
 
@@ -2342,7 +2339,7 @@ zgzhangong2 = sgs.CreateTriggerSkill{
 	name = "#zgzhangong2",
 	events = {sgs.CardFinished,sgs.EventPhaseStart,sgs.EventPhaseEnd,sgs.Pindian,sgs.CardEffect,sgs.CardEffected,sgs.Predamage,sgs.ChoiceMade,
 		sgs.SlashEffected,sgs.SlashEffect,sgs.CardsMoveOneTime,sgs.CardDiscarded,sgs.CardResponsed,
-		sgs.SlashMissed},
+		sgs.SlashMissed,sgs.CardDrawing},
 	priority = 6,
 	on_trigger = function(self, event, player, data)
 		local room = player:getRoom()
