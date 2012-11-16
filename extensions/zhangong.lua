@@ -703,19 +703,9 @@ zgfunc[sgs.CardFinished].jfhz=function(self, room, event, player, data,isowner,n
 	if  room:getOwner():getGeneralName()~='handang' then return false end
 	if not isowner then return false end
 	local use=data:toCardUse()
-	if use.to:getGeneralName()=="sunquan" and use.card:getSkillName()=="jiefan" then
-		local role1=room:getOwner():getRole()
-		local role2=ap:getRole()
-		if role1=="lord" then role1="loyalist" end
-		if role2=="lord" then role2="loyalist" end
-		if room:getMode() == "06_3v3" then
-			if role1=="renegade" then role1="rebel" end
-			if role2=="renegade" then role2="rebel" end
-		end
-		local diffgroup =false
-		if role1~=role2 then diffgroup=true end
-		if role1=="renegade" or role2=="renegade" then diffgroup=true end
-		if diffgroup then return false end
+	local tos=sgs.QList2Table(use.to)
+	if tos and #tos and tos[1]:getGeneralName()=="sunquan"
+			and use.card:getSkillName()=="jiefan" and isSameGroup(player,tos[1]) then
 		addGameData(name,1)
 		if getGameData(name)==2 then addZhanGong(room, name) end
 	end
