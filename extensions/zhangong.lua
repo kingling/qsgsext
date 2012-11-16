@@ -163,7 +163,7 @@ zgfunc[sgs.Death].bj=function(self, room, event, player, data,isowner,name)
 	if room:getOwner():isLord() and damage.from and damage.from:objectName()==room:getOwner():objectName() 
 		and damage.to:getRole()=="loyalist" then
 		local players = room:getPlayers()
-		local enemy_dead=0,0
+		local enemy_dead=0
 		for _, p in sgs.qlist(players) do
 			if p:getRole()=="rebel" or p:getRole()=="renegade" then
 				if p:isDead() then enemy_dead=enemy_dead+1 end
@@ -188,7 +188,9 @@ zgfunc[sgs.GameOverJudge].callback.bj=function(room,player,data,name,result)
 			end
 		end
 	end
-	if getGameData(name)==loyalist_num then addZhanGong(room,name) end
+	if getGameData(name)==loyalist_num and loyalist_num>0 then
+		addZhanGong(room,name)
+	end
 end
 
 
@@ -1697,7 +1699,7 @@ end
 
 --因为 room:findPlayer 没有考虑副将，因此写一个 findPlayerByGeneralName
 function findPlayerByGeneralName(room,name)
-	for _, p in sgs.qlist(room:getAllPlayers()) do
+	for _, p in sgs.qlist(room:getPlayers()) do
 		if p:getGeneralName()==name or p:getGeneral2Name()==name then return true end
 	end
 	return false
