@@ -1517,7 +1517,7 @@ zgfunc[sgs.CardFinished].zmjzg=function(self, room, event, player, data,isowner,
 	if not isowner then return false end
 	local use=data:toCardUse()
 	local tos=sgs.QList2Table(use.to)
-	if use.card:isKindOf("NosJujianCard") and tos and #tos and
+	if use.card:isKindOf("NosJujianCard") and tos and #tos
 		and (#tos[1]:getGeneralName()=="zhugeliang" or #tos[1]:getGeneralName()=="wolong" or #tos[1]:getGeneralName()=="shenzhugeliang") then
 		local has_horse=false
 		for _,cd in sgs.qlist(use.card:getSubcards()) do
