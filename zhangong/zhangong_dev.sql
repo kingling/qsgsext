@@ -311,7 +311,7 @@ INSERT INTO zhangong VALUES('yrbf', '隐忍不发', 10, '使用神司马懿在�
 INSERT INTO zhangong VALUES('ysadj', '以死安大局', 10, '使用马谡在一局游戏中发动“挥泪”使一名角色弃置8张牌', 0, 'shu', '1999-12-31 00:00:00', 'masu', 0, 0);
 INSERT INTO zhangong VALUES('yzrx', '医者仁心', 10, '使用华佗在一局游戏中对4个身份的人都发动过青囊并最后获胜', 0, 'qun', '1999-12-31 00:00:00', 'huatuo', 0, 0);
 INSERT INTO zhangong VALUES('zlzn', '昭烈之怒', 10, '在一局游戏中，使用☆SP刘备发动昭烈杀死至少2人', 0, 'shu', '1999-12-31 00:00:00', 'bgm_liubei', 0, 0);
-INSERT INTO zhangong VALUES('zmjzg', '走马荐诸葛', 10, '使用徐庶在一局游戏中至少有3次举荐诸葛且用于举荐的牌里必须有马', 0, 'shu', '1999-12-31 00:00:00', 'xushu', 0, 0);
+INSERT INTO zhangong VALUES('zmjzg', '走马荐诸葛', 10, '使用旧徐庶在一局游戏中至少有3次举荐诸葛且用于举荐的牌里必须有马', 0, 'shu', '1999-12-31 00:00:00', 'xushu', 0, 0);
 INSERT INTO zhangong VALUES('zsbsh', '宗室遍四海', 10, '使用刘表在一局游戏中利用技能“宗室”提高4手牌上限', 0, 'qun', '1999-12-31 00:00:00', 'liubiao', 0, 0);
 INSERT INTO zhangong VALUES('zszn', '战神之怒', 10, '使用神吕布在一局游戏中发动至少4次神愤、3次无前', 0, 'god', '1999-12-31 00:00:00', 'shenlvbu', 0, 0);
 INSERT INTO zhangong VALUES('zzhs', '智之化身', 10, '使用黄月英在一局游戏发动“集智”至少20次', 0, 'shu', '1999-12-31 00:00:00', 'huangyueying', 0, 0);

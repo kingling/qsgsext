@@ -571,9 +571,9 @@ zgfunc[sgs.CardsMoveOneTime].ymds=function(self, room, event, player, data,isown
 	if not isowner then return false end
 	local move=data:toMoveOneTime()
 	if move.from_places:contains(sgs.Player_PlaceHand) and move.from:objectName()==room:getOwner():objectName()
-		and move.to_place==sgs.Player_PlaceEquip then
+		and move.to_place==sgs.Player_PlaceEquip and move.to:objectName()==room:getOwner():objectName() then
 		for _,cdid in sgs.qlist(move.card_ids) do
-			if sgs.Sanguosha:getCard(cid):isKindOf("Horse") then
+			if sgs.Sanguosha:getCard(cdid):isKindOf("Horse") then
 				addGameData(name,1)
 				if getGameData(name)==8 then addZhanGong(room,name) end
 			end
@@ -597,7 +597,6 @@ end
 --
 zgfunc[sgs.GameOverJudge].callback.cqcz=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='bulianshi' then return false end
-	if not isowner then return false end
 	if result=='win' and getGameData(name)>=4 and room:getOwner():isDead() then
 		addZhanGong(room,name)
 	end
@@ -710,7 +709,7 @@ zgfunc[sgs.CardFinished].jjh=function(self, room, event, player, data,isowner,na
 
 	--这里用 mark不太好用，因为一个人死后会扔掉所有mark
 	if tos and #tos and use.card:isKindOf("JieyinCard") then
-		local objname=#tos[1]:objectName()
+		local objname=tos[1]:objectName()
 		local value=getGameData(name,'')
 		if not string.find(value,objname..',') then
 			setGameData(name,value..objname..',')
@@ -1456,11 +1455,9 @@ zgfunc[sgs.Death].ysadj=function(self, room, event, player, data,isowner,name)
 	local damage=data:toDamageStar()
 	if damage and damage.from and damage.to:hasSkill('huilei') then
 		local num=damage.from:getHandcardNum()
-		player:speak(num)
 		for i=0,3,1 do
 			if damage.from:getEquip(i) then num = num + 1 end
 		end
-		player:speak(num)
 		if num>=8 then
 			addZhanGong(room,name)
 		end
@@ -1468,18 +1465,7 @@ zgfunc[sgs.Death].ysadj=function(self, room, event, player, data,isowner,name)
 end
 
 zgfunc[sgs.GameOverJudge].callback.ysadj=function(room,player,data,name,result)
-	if  room:getOwner():getGeneralName()~='masu' then return false end
-	if not isowner then return false end
-	local damage=data:toDamageStar()
-	if damage and damage.from and damage.to:hasSkill('huilei') then
-		local num=damage.from:getHandcardNum()
-		for i=0,3,1 do
-			if damage.from:getEquip(i) then num = num + 1 end
-		end
-		if num>=8 then
-			addZhanGong(room,name)
-		end
-	end
+	--杀死马谡而导致游戏结束，杀手不会弃牌
 end
 
 
@@ -1518,7 +1504,7 @@ zgfunc[sgs.CardFinished].zmjzg=function(self, room, event, player, data,isowner,
 	local use=data:toCardUse()
 	local tos=sgs.QList2Table(use.to)
 	if use.card:isKindOf("NosJujianCard") and tos and #tos
-		and (#tos[1]:getGeneralName()=="zhugeliang" or #tos[1]:getGeneralName()=="wolong" or #tos[1]:getGeneralName()=="shenzhugeliang") then
+		and (tos[1]:getGeneralName()=="zhugeliang" or tos[1]:getGeneralName()=="wolong" or tos[1]:getGeneralName()=="shenzhugeliang") then
 		local has_horse=false
 		for _,cd in sgs.qlist(use.card:getSubcards()) do
 			if sgs.Sanguosha:getCard(cd):isKindOf("Horse") then
@@ -1670,7 +1656,7 @@ end
 
 zgfunc[sgs.GameOverJudge].callback.syqd=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~="huaxiong" then return false end
-	if isowner and player:getMaxHp()<1 and not findPlayerByGeneralName(room,'madai') then
+	if player:objectName()==room:getOwner():objectName() and player:getMaxHp()<1 and not findPlayerByGeneralName(room,'madai') then
 		addZhanGong(room,name)
 	end
 end
