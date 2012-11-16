@@ -576,11 +576,12 @@ end
 -- ymds :: 驭马大师 :: 在一局游戏中，至少更换过8匹马
 --
 zgfunc[sgs.CardsMoveOneTime].ymds=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
 	local move=data:toMoveOneTime()
-	if move.from_places:contains(sgs.Player_PlaceEquip) and move.from:objectName()==room:getOwner():objectName()
-		and move.reason==sgs.CardMoveReason_S_REASON_CHANGE_EQUIP then
+	if move.from_places:contains(sgs.Player_PlaceHand) and move.from:objectName()==room:getOwner():objectName()
+		and move.to_place==sgs.Player_PlaceEquip then
 		for _,cdid in sgs.qlist(move.card_ids) do
-			if cdid:isKindOf("Horse") then
+			if sgs.Sanguosha:getCard(cid):isKindOf("Horse") then
 				addGameData(name,1)
 				if getGameData(name)==8 then addZhanGong(room,name) end
 			end
