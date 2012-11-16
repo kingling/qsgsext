@@ -841,6 +841,10 @@ zgfunc[sgs.ChoiceMade].syjh=function(self, room, event, player, data,isowner,nam
 	if choices[1]=="skillInvoke"  and  choices[2]=="anxian" and choices[3]=="yes" then
 		addGameData(name,1)
 	end
+	if choices[1]=="cardResponsed"  and  choices[2]=="." and choices[3]=="@anxian-discard" and choices[4]~="_nil_" then
+		addGameData(name,1)
+	end
+	player:speak(data:toString())
 end
 
 zgfunc[sgs.GameOverJudge].callback.syjh=function(room,player,data,name,result)
