@@ -510,8 +510,10 @@ zgfunc[sgs.GameOverJudge].callback.wsww=function(room,player,data,name,result)
 	if getGameData("hegemony")==1 then return false end
 	local rebel_num=0
 	for _,ap in sgs.qlist(room:getPlayers()) do
-		if ap:getRole()=="rebel" then
-			if ap:isAlive() then return false
+		--这里不能把自己计算在内
+		if ap:getRole()=="rebel" and ap:objectName()~=room:getOwner():objectName() then
+			if ap:isAlive() then 
+				return false
 			else
 				rebel_num=rebel_num+1
 			end
