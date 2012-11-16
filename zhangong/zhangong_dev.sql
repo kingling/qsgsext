@@ -236,7 +236,7 @@ INSERT INTO zhangong VALUES('cbyx', '长坂英雄', 10, '使用赵云在一局�
 INSERT INTO zhangong VALUES('cqb', '拆迁办', 15, '在一个回合内使用卡牌过河拆桥/顺手牵羊累计4次', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('cqcz', '此情常在', 10, '在一局游戏中，布练师发动安恤4次并在阵亡情况下获胜', 0, 'wu', '1999-12-31 00:00:00', 'bulianshi', 0, 0);
 INSERT INTO zhangong VALUES('cqdd', '拆迁大队', 15, '在一局游戏中，累计使用卡牌过河拆桥10次以上', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
-INSERT INTO zhangong VALUES('ctbc', '拆桃不偿', 10, '使用甘宁在一局游戏中发动“奇袭”从对方手牌中拆掉至少5张桃', 0, 'wu', '1999-12-31 00:00:00', 'ganning', 0, 0);
+INSERT INTO zhangong VALUES('ctbc', '拆桃不偿', 10, '使用甘宁在一局游戏中至少拆掉对方5张桃', 0, 'wu', '1999-12-31 00:00:00', 'ganning', 0, 0);
 INSERT INTO zhangong VALUES('dcxj', '雕虫小技', 10, '使用卧龙在一局游戏中发动“看破”至少15次', 0, 'shu', '1999-12-31 00:00:00', 'wolong', 0, 0);
 INSERT INTO zhangong VALUES('dkjj', '荡寇将军', 10, '使用程普在一局游戏中，发动技能“疠火”杀死至少三名反贼最终获得胜利', 0, 'wu', '1999-12-31 00:00:00', 'chengpu', 0, 0);
 INSERT INTO zhangong VALUES('dkzz', '杜康之子', 10, '使用曹植在一局游戏中发动酒诗后成功用杀造成伤害累计5次', 0, 'wei', '1999-12-31 00:00:00', 'caozhi', 0, 0);

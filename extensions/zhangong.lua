@@ -603,27 +603,16 @@ zgfunc[sgs.GameOverJudge].callback.cqcz=function(room,player,data,name,result)
 end
 
 
--- ctbc :: 拆桃不偿 :: 使用甘宁在一局游戏中发动“奇袭”从对方手牌中拆掉至少5张桃
+-- ctbc :: 拆桃不偿 :: 使用甘宁在一局游戏中至少拆掉对方5张桃
 --
-zgfunc[sgs.CardsMoveOneTime].ctbc=function(self, room, event, player, data,isowner,name)
-	if room:getOwner():getGeneralName()~="ganning" then return false end
-	if room:getCurrent():objectName()~=room:getOwner():objectName() then return false end
-	local move=data:toMoveOneTime()
-	local from_places=sgs.QList2Table(move.from_places)
-	local reason=move.reason
-	if reason.m_playerId==room:getOwner():objectName() and reason.m_skillName=="qixi" and isowner then
-		if table.contains(from_places,sgs.Player_PlaceHand) and move.to_place==sgs.Player_DiscardPile then
-			local ids=sgs.QList2Table(move.card_ids)
-			for _,cid in ipairs(ids) do
-				local card=sgs.Sanguosha:getCard(cid)
-				if card:isKindOf("Peach")  then
-					addGameData(name,1)
-					if getGameData(name)==5 then
-						addZhanGong(room,name)
-						return false
-					end
-				end
-			end
+zgfunc[sgs.ChoiceMade].ctbc=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~="ganning" then return false end
+	if not isowner then return false end
+	local choices= data:toString():split(":")
+	if choices[1]=="cardChosen" and choices[2]=="dismantlement" and sgs.Sanguosha:getCard(choices[3]):isKindOf("Peach") then
+		addGameData(name,1)
+		if getGameData(name)==5 then
+			addZhanGong(room,name)
 		end
 	end
 end
