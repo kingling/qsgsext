@@ -285,7 +285,7 @@ end
 
 -- dgxl :: 东宫西略 :: 在一局游戏中，身份为男性主公，而忠臣为两名女性武将并在女性忠臣全部存活的情况下获胜
 --
-zgfunc[sgs.GameOverJudge].callback.dxgl=function(room,player,data,name,result)
+zgfunc[sgs.GameOverJudge].callback.dgxl=function(room,player,data,name,result)
 	if getGameData("hegemony")==1 then return false end
 	local female_loyalist = 0
 	local female_loyalist_alive = true
