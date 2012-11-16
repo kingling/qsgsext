@@ -261,7 +261,7 @@ INSERT INTO zhangong VALUES('jfhz', '解烦护主', 10, '使用韩当在一局�
 INSERT INTO zhangong VALUES('jg', '酒鬼', 15, '出牌阶段开始时，手牌中至少有3张“酒”', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('jhlt', '举火燎天', 15, '在一局游戏中，造成火焰伤害累计10点以上，不含武将技能', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('jjfs', '绝境逢生', 10, '使用神赵云在一局游戏中,当体力为一的时候，一直保持一体力直到游戏获胜', 0, 'god', '1999-12-31 00:00:00', 'shenzhaoyun', 0, 0);
-INSERT INTO zhangong VALUES('jjh', '交际花', 10, '使用孙尚香和全部其他角色皆使用过结姻', 0, 'wu', '1999-12-31 00:00:00', 'sunshangxiang', 0, 0);
+INSERT INTO zhangong VALUES('jjh', '交际花', 10, '使用孙尚香和全部其他(且至少4个)角色皆使用过结姻', 0, 'wu', '1999-12-31 00:00:00', 'sunshangxiang', 0, 0);
 INSERT INTO zhangong VALUES('jjnh', '禁军难护', 10, '使用韩当在一局游戏中有角色濒死时发动“解烦”并出杀后均被闪避至少5次', 0, 'wu', '1999-12-31 00:00:00', 'handang', 0, 0);
 INSERT INTO zhangong VALUES('jjyb', '戒酒以备', 10, '使用高顺在一局游戏中使用技能“禁酒”将至少6张酒当成杀使用或打出', 0, 'qun', '1999-12-31 00:00:00', 'gaoshun', 0, 0);
 INSERT INTO zhangong VALUES('jsbc', '坚守不出', 10, '使用曹仁在一局游戏中连续8回合发动据守', 0, 'wei', '1999-12-31 00:00:00', 'caoren', 0, 0);

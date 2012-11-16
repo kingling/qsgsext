@@ -712,23 +712,27 @@ zgfunc[sgs.CardFinished].jfhz=function(self, room, event, player, data,isowner,n
 end
 
 
--- jjh :: 交际花 :: 使用孙尚香和全部其他角色皆使用过结姻
+-- jjh :: 交际花 :: 使用孙尚香和全部其他(且至少4个)角色皆使用过结姻
 --
 zgfunc[sgs.CardFinished].jjh=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='sunshangxiang' then return false end
 	if not isowner then return false end
 	local use=data:toCardUse()
-	if use.card:isKindOf("JieyinCard") and use.to:first():getMark("jieyinzg_count")==0 then
-		room:setPlayerMark(use.to, "jieyinzg_count", 1)
-		local jieyin_count=0
-		for _,ap in sgs.qlist(room:getPlayers()) do
-			if ap:objectName()~=player:objectName() then
-				if ap:getMark("jieyinzg_count")>0 then
-					jieyin_count=jieyin_count+1
-				end
+	local tos=sgs.QList2Table(use.to)
+
+	--这里用 mark不太好用，因为一个人死后会扔掉所有mark
+	if tos and #tos and use.card:isKindOf("JieyinCard") then
+		local objname=#tos[1]:objectName()
+		local value=getGameData(name,'')
+		if not string.find(value,objname..',') then
+			setGameData(name,value..objname..',')
+			local list=getGameData(name):split(',')
+
+			--无需 减1， 因为字符串最后正好多了个逗号
+			if #list>=4 and #list==sgs.Sanguosha:getPlayerCount(room:getMode()) then
+				addZhanGong(room,name)
 			end
 		end
-		if jieyin_count==room:getPlayers():length()-1 then addZhanGong(room,name) end
 	end
 end
 
