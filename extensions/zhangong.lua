@@ -2075,11 +2075,18 @@ end
 --
 -- 这是一个隐藏描述的战功,如果你已经看到这里，请不要向任何人透露该战功的达成条件。
 --
+zgfunc[sgs.CardFinished].yfnzmk=function(self, room, event, player, data,isowner,name)
+	if not isowner then return false end
+	local use=data:toCardUse()
+	local card=use.card
+	if card:isKindOf("KurouCard") then setTurnData(name,1) end
+end
+
 zgfunc[sgs.GameOverJudge].yfnzmk=function(self, room, event, player, data,isowner,name)
 	if getGameData("hegemony")==1 then return false end
 	local damage=data:toDamageStar()
 	if isowner and damage and damage.from and room:getOwner():isLord() and getGameData("turncount")==1
-			and room:getCurrent():objectName()==room:getOwner():objectName() then
+			and room:getCurrent():objectName()==room:getOwner():objectName() and getTurnData(name)==0 then
 		addZhanGong(room,name)
 	end
 end
