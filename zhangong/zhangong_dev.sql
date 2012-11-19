@@ -251,7 +251,7 @@ INSERT INTO zhangong VALUES('gmzc', '过目之才', 10, '使用☆SP庞统一回
 INSERT INTO zhangong VALUES('gn', '果农', 15, '游戏开始时，起手手牌全部是“桃”', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('gqzl', '顾曲周郎', 10, '使用神周瑜连续至少4回合发动琴音回复体力', 0, 'god', '1999-12-31 00:00:00', 'shenzhouyu', 0, 0);
 INSERT INTO zhangong VALUES('gzwb', '固政为本', 10, '使用张昭张纮在一局游戏中利用技能“固政”获得累计至少40张牌', 0, 'wu', '1999-12-31 00:00:00', 'erzhang', 0, 0);
-INSERT INTO zhangong VALUES('lgzw', '雷公助我', 10, '使用张角在一局游戏中至少4次雷击成功', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
+INSERT INTO zhangong VALUES('lgzw', '雷公助我', 10, '使用张角在一局游戏中在未更改判定牌的情况下至少4次雷击成功', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
 INSERT INTO zhangong VALUES('hlzms', '挥泪斩马谡', 10, '使用诸葛亮杀死马谡', 0, 'shu', '1999-12-31 00:00:00', 'zhugeliang', 0, 0);
 INSERT INTO zhangong VALUES('htdl', '黄天当立', 15, '使用张角在一局游戏中从群雄武将处得到的闪不少于8张', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
 INSERT INTO zhangong VALUES('hztx', '虎子同心', 10, '使用关兴张苞在父魂成功后，一个回合杀死至少三名反贼', 0, 'shu', '1999-12-31 00:00:00', 'guanxingzhangbao', 0, 0);

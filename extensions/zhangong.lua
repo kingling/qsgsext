@@ -1554,12 +1554,12 @@ zgfunc[sgs.HpRecover].bnzw=function(self, room, event, player, data,isowner,name
 end
 
 
--- lgzw :: 雷公助我 :: 使用张角在一局游戏中至少4次雷击成功
+-- lgzw :: 雷公助我 :: 使用张角在一局游戏中在未更改判定牌的情况下至少4次雷击成功
 --
 zgfunc[sgs.FinishRetrial].lgzw=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhangjiao' then return false end
 	local judge=data:toJudge()
-	if judge.reason=="leiji" and judge:isBad() then
+	if judge.reason=="leiji" and judge:isBad() and room:getTag("retrial"):toBool()==false then
 		addGameData(name,1)
 		if getGameData(name)==4 then
 			addZhanGong(room,name)
