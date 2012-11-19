@@ -325,7 +325,6 @@ zgfunc[sgs.CardFinished].gjcc=function(self, room, event, player, data,isowner,n
 		addGameData(name,1)
 		if getGameData(name)==20 then addZhanGong(room,name) end
 	end
-	
 end
 
 
@@ -343,15 +342,25 @@ zgfunc[sgs.GameStart].gn=function(self, room, event, player, data,isowner,name)
 end
 
 
--- htdl :: 黄天当立 :: 使用张角在一局游戏中通过黄天得到的闪不少于8张
+-- htdl :: 黄天当立 :: 使用张角在一局游戏中从群雄武将处得到的闪不少于8张
 --
-zgfunc[sgs.CardEffected].htdl=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.CardsMoveOneTime].htdl=function(self, room, event, player, data,isowner,name)
+	if  room:getOwner():getGeneralName()~='zhangjiao' then return false end
 	if not isowner then return false end
-	if player:getGeneralName()~="zhangjiao" then return false end
-	local effect=data:toCardEffect()
-	if effect.card:isKindOf("HuangtianCard") and sgs.Sanguosha:getCard(effect.card:getSubcards():first()):isKindOf("Jink") then
-		addGameData(name,1)
-		if getGameData(name)==8 then addZhanGong(room,name) end
+	local move=data:toMoveOneTime()
+	local ids=sgs.QList2Table(move.card_ids)
+	local from_places=sgs.QList2Table(move.from_places)
+	if table.contains(from_places,sgs.Player_PlaceHand) and move.to_place==sgs.Player_PlaceHand
+			and move.to:objectName()==room:getOwner():objectName() and move.from:getKingdom()=='qun' then
+		for i=1,#ids,1 do
+			local card=sgs.Sanguosha:getCard(ids[i])
+			if card:isKindOf("Jink") then
+				addGameData(name,1)
+				if getGameData(name)==8 then
+					addZhanGong(room,name)
+				end
+			end
+		end
 	end
 end
 
@@ -1062,6 +1071,7 @@ end
 
 -- qqtx :: 权倾天下 :: 使用钟会在一局游戏中发动“排异”累计摸牌至少10张
 --
+zgfunc[sgs.CardDrawing].qqtx=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhonghui' then return false end
 	local x=data:toInt()
 	if isowner and sgs.Sanguosha:getCard(x):hasFlag("paiyi") then
@@ -1544,29 +1554,15 @@ zgfunc[sgs.HpRecover].bnzw=function(self, room, event, player, data,isowner,name
 end
 
 
--- hjqy :: 黄巾起义 :: 使用张角在一局游戏中收到过群雄角色给的闪至少3张，并至少3次雷击成功
+-- lgzw :: 雷公助我 :: 使用张角在一局游戏中至少4次雷击成功
 --
-zgfunc[sgs.CardEffected].hjqy=function(self, room, event, player, data,isowner,name)
-	if not isowner then return false end
-	if player:getGeneralName()~="zhangjiao" then return false end
-	local effect=data:toCardEffect()
-	if effect.card:isKindOf("HuangtianCard") and sgs.Sanguosha:getCard(effect.card:getSubcards():first()):isKindOf("Jink") then
-		setGameData(name..'_jink',math.min(3,getGameData(name..'_jink')+1))
-		if getGameData(name..'_jink')==3 and getGameData(name..'_leiji')==3 then
-			addZhanGong(room,name)
-			setGameData(name..'_jink',-100)
-		end
-	end
-end
-
-zgfunc[sgs.FinishRetrial].hjqy=function(self, room, event, player, data,isowner,name)
+zgfunc[sgs.FinishRetrial].lgzw=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='zhangjiao' then return false end
 	local judge=data:toJudge()
 	if judge.reason=="leiji" and judge:isBad() then
-		setGameData(name..'_leiji',math.min(3,getGameData(name..'_leiji')+1))
-		if getGameData(name..'_jink')==3 and getGameData(name..'_leiji')==3 then
+		addGameData(name,1)
+		if getGameData(name)==4 then
 			addZhanGong(room,name)
-			setGameData(name..'_jink',-100)
 		end
 	end
 end
@@ -1581,8 +1577,7 @@ zgfunc[sgs.CardFinished].jjyb=function(self, room, event, player, data,isowner,n
 	if player:getGeneralName()~="gaoshun" then return false end
 	local use=data:toCardUse()
 	local card=use.card
-	--sgs.Sanguosha:getCard(card:getSubcards():first()):isKindOf("Analeptic")
-	if card:isKindOf("Slash") and card:getSkillName()=="jinjiu" then
+	if card:isKindOf("Analeptic") then
 		addGameData(name,1)
 		if getGameData(name)==6 then addZhanGong(room,name) end
 	end
@@ -2070,6 +2065,21 @@ zgfunc[sgs.HpChanged].dsdnx=function(self, room, event, player, data,isowner,nam
 	if room:getMode()~="04_1v3" or not player:isLord() then return false end
 	if room:getCurrent():objectName()~=room:getOwner():objectName() or getGameData("turncount")>1 then return false end
 	if room:getOwner():getSeat()==2 and player:getHp()<= 4 and player:getMark("secondMode") == 0 then
+		addZhanGong(room,name)
+	end
+end
+
+-- yfnzmk :: 元芳，你怎么看 :: 元芳，你怎么看？大人，这不科学。
+--
+--
+--
+-- 这是一个隐藏描述的战功,如果你已经看到这里，请不要向任何人透露该战功的达成条件。
+--
+zgfunc[sgs.GameOverJudge].yfnzmk=function(self, room, event, player, data,isowner,name)
+	if getGameData("hegemony")==1 then return false end
+	local damage=data:toDamageStar()
+	if isowner and damage and damage.from and room:getOwner():isLord() and getGameData("turncount")==1
+			and room:getCurrent():objectName()==room:getOwner():objectName() then
 		addZhanGong(room,name)
 	end
 end
