@@ -329,15 +329,17 @@ zgfunc[sgs.CardFinished].gjcc=function(self, room, event, player, data,isowner,n
 end
 
 
--- gn :: 果农 :: 游戏开始时，起手4张“桃”
+-- gn :: 果农 :: 游戏开始时，起手手牌全部是“桃”
 --
 zgfunc[sgs.GameStart].gn=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
-	local peach_num=0
 	for _,cd in sgs.qlist(player:getHandcards()) do
-		if cd:isKindOf("Peach") then peach_num=peach_num+1 end
+		if not cd:isKindOf("Peach") then return false end
 	end
-	if peach_num == 4 then addZhanGong(room,name) end
+	if getGameData(name,0)==0 then
+		setGameData(name,1)
+		addZhanGong(room,name)
+	end
 end
 
 
@@ -449,17 +451,16 @@ zgfunc[sgs.CardFinished].stzs=function(self, room, event, player, data,isowner,n
 end
 
 
--- thy :: 桃花运 :: 当你的开局4牌全部为红桃时，体力上限加1
+-- thy :: 桃花运 :: 当你的开局手牌全部为红桃时，体力上限加1
 --
 zgfunc[sgs.GameStart].thy=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
-	local heart_num=0
-	if player:getHandcardNum()~=4 then return false end
 	for _,cd in sgs.qlist(player:getHandcards()) do
-		if cd:getSuit()==sgs.Card_Heart then heart_num=heart_num+1 end
+		if cd:getSuit()~=sgs.Card_Heart then return false end
 	end
-	if heart_num == 4 then 
-		addZhanGong(room,name) 
+	if getGameData(name,0) == 0 then
+		setGameData(name,1)
+		addZhanGong(room,name)
 		room:setPlayerProperty(player, "maxhp", sgs.QVariant(player:getMaxHp()+1))
 	end
 end

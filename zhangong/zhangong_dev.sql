@@ -248,7 +248,7 @@ INSERT INTO zhangong VALUES('fynd', '愤勇难当', 10, '使用☆SP夏侯惇在
 INSERT INTO zhangong VALUES('gjcc', '诡计重重', 15, '在一局游戏中，累计使用锦囊牌至少20次', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('glnc', '刚烈难存', 10, '使用夏侯惇在一局游戏中连续4次刚烈判定均为红桃', 0, 'wei', '1999-12-31 00:00:00', 'xiahoudun', 0, 0);
 INSERT INTO zhangong VALUES('gmzc', '过目之才', 10, '使用☆SP庞统一回合内累计拿到至少16张牌', 0, 'shu', '1999-12-31 00:00:00', 'bgm_pangtong', 0, 0);
-INSERT INTO zhangong VALUES('gn', '果农', 15, '游戏开始时，起手4张“桃”', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('gn', '果农', 15, '游戏开始时，起手手牌全部是“桃”', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('gqzl', '顾曲周郎', 10, '使用神周瑜连续至少4回合发动琴音回复体力', 0, 'god', '1999-12-31 00:00:00', 'shenzhouyu', 0, 0);
 INSERT INTO zhangong VALUES('gzwb', '固政为本', 10, '使用张昭张纮在一局游戏中利用技能“固政”获得累计至少40张牌', 0, 'wu', '1999-12-31 00:00:00', 'erzhang', 0, 0);
 INSERT INTO zhangong VALUES('hjqy', '黄巾起义', 10, '使用张角在一局游戏中收到过群雄角色给的闪至少3张，并至少3次雷击成功', 0, 'qun', '1999-12-31 00:00:00', 'zhangjiao', 0, 0);
@@ -285,7 +285,7 @@ INSERT INTO zhangong VALUES('stzs', '神偷再世', 15, '在一局游戏中，�
 INSERT INTO zhangong VALUES('swzs', '神威之势', 10, '使用神赵云发动各花色龙魂各两次并在存活的情况下取得游戏胜利', 0, 'god', '1999-12-31 00:00:00', 'shenzhaoyun', 0, 0);
 INSERT INTO zhangong VALUES('syjh', '岁月静好', 10, '使用☆SP大乔在一局游戏中发动安娴五次并获胜', 0, 'wu', '1999-12-31 00:00:00', 'bgm_daqiao', 0, 0);
 INSERT INTO zhangong VALUES('syqd', '恃勇轻敌', 10, '使用华雄在一局游戏中，在没有马岱在场的情况下由于体力上限减至0而死亡', 0, 'qun', '1999-12-31 00:00:00', 'huaxiong', 0, 0);
-INSERT INTO zhangong VALUES('thy', '桃花运', 15, '当你的开局4牌全部为红桃时，体力上限加1', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
+INSERT INTO zhangong VALUES('thy', '桃花运', 15, '当你的开局手牌全部为红桃时，体力上限加1', 0, 'zhonghe', '1999-12-31 00:00:00', '-', 0, 0);
 INSERT INTO zhangong VALUES('tmnw', '天命难违', 10, '使用司马懿被自己挂的闪电劈死，不包括改判', 0, 'wei', '1999-12-31 00:00:00', 'simayi', 0, 0);
 INSERT INTO zhangong VALUES('tmzf', '天命之罚', 10, '在一局游戏中，使用司马懿更改闪电判定牌至少劈中其他角色两次', 0, 'wei', '1999-12-31 00:00:00', 'simayi', 0, 0);
 INSERT INTO zhangong VALUES('tyzm', '桃园之梦', 10, '使用神关羽在一局游戏中阵亡后发动武魂判定结果为桃园结义', 0, 'god', '1999-12-31 00:00:00', 'shenguanyu', 0, 0);
