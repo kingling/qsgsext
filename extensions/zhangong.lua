@@ -1288,12 +1288,12 @@ zgfunc[sgs.CardFinished].dcxj=function(self, room, event, player, data,isowner,n
 end
 
 
--- dyzh :: 当阳之吼 :: 在一局游戏中，使用☆SP张飞累计两次在大喝拼点成功的回合中用红“杀”手刃一名角色
+-- dyzh :: 当阳之吼 :: 在一局游戏中，使用☆SP张飞累计发动大喝与一名角色拼点成功的回合中用红“杀”手刃该角色
 --
 zgfunc[sgs.Death].dyzh=function(self, room, event, player, data,isowner,name)
 	if  room:getOwner():getGeneralName()~='bgm_zhangfei' then return false end
 	local damage=data:toDamageStar()
-	if damage and damage.from and damage.from:hasFlag("dahe") and damage.from==room:getOwner():objectName() 
+	if damage and damage.from and damage.to:hasFlag("dahe") and damage.from==room:getOwner():objectName() 
 		and damage.card:isKindOf("Slash") and damage.card:isRed() then
 		addGameData(name,1)
 		if getGameData(name)==2 then addZhanGong(room,name) end
@@ -1301,13 +1301,13 @@ zgfunc[sgs.Death].dyzh=function(self, room, event, player, data,isowner,name)
 end
 
 
--- dyzh :: 当阳之吼 :: 在一局游戏中，使用☆SP张飞累计两次在大喝拼点成功的回合中用红“杀”手刃一名角色
+-- dyzh :: 当阳之吼 :: 在一局游戏中，使用☆SP张飞累计发动大喝与一名角色拼点成功的回合中用红“杀”手刃该角色
 --
 zgfunc[sgs.GameOverJudge].callback.dyzh=function(room,player,data,name,result)
 	if  room:getOwner():getGeneralName()~='bgm_zhangfei' then return false end
 	local damage=data:toDamageStar()
-	if damage.from:hasFlag("dahe") and damage.from==room:getOwner():objectName() and damage.card:isKindOf("Slash")
-		and damage.card:isRed() then
+	if damage and damage.from and damage.to:hasFlag("dahe") and damage.from==room:getOwner():objectName() 
+		and damage.card:isKindOf("Slash") and damage.card:isRed() then
 		addGameData(name,1)
 		if getGameData(name)==2 then addZhanGong(room,name) end
 	end
