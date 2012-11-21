@@ -223,11 +223,14 @@ end
 
 -- bqbr :: 不屈不饶 :: 一格体力情况下，累积出闪100次
 --
+--
+-- 这里出一个闪会计算为两次，暂且用 N*2 修复这个问题
+--
 zgfunc[sgs.CardResponsed].bqbr=function(self, room, event, player, data,isowner,name)
 	if not isowner then return false end
 	if player:getHp() == 1 and data:toResponsed().m_card:isKindOf("Jink") then
 		addGlobalData(name,1)
-		if getGlobalData(name)==100 then addZhanGong(room,name) end
+		if getGlobalData(name)==100*2 then addZhanGong(room,name) end
 	end
 end
 
@@ -538,10 +541,13 @@ end
 
 -- xcdz :: 星驰电走 :: 在一局游戏中，累计出闪20次
 --
+--
+-- 这里出一个闪会计算为两次，暂且用 N*2 修复这个问题
+--
 zgfunc[sgs.CardResponsed].xcdz=function(self, room, event, player, data,isowner,name)
 	if data:toResponsed().m_card:isKindOf("Jink") and isowner then
 		addGameData(name,1)
-		if getGameData(name)==20 then addZhanGong(room,name) end
+		if getGameData(name)==20*2 then addZhanGong(room,name) end
 	end
 end
 
